@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#1a1a1e</color>
+    <color name="colorPrimaryDark">#040405</color>
+    <color name="colorAccent">#be31ff</color>
+
+    <color name="navBar1">#b822ff</color>
+    <color name="navBar2">#a01ede</color>
+    <color name="navBar3">#da22ff</color>
+
+    <color name="grey">#bdffffff</color>
+    <color name="darkgrey">#07ffffff</color>
+
+    <color name="backGroundGradient1">#23232d</color>
+    <color name="backGroundGradient2">#0b0b0d</color>
+
+    <color name="roundedRectGradient1">#343441</color>
+    <color name="roundedRectGradient2">#24242e</color>
+
+    <color name="searchBar">#111115</color>
+    <color name="graph">#44000000</color>
+
+</resources>
