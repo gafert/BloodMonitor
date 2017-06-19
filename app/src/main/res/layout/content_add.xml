@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="fhtw.bsa2.gafert_steiner.BloodMonitor.activities.AddActivity"
+    tools:showIn="@layout/activity_add">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_horizontal"
+        android:orientation="vertical"
+        android:weightSum="1">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_rect_gradient_background"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:paddingBottom="15dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="15dp">
+
+            <LinearLayout
+                android:layout_width="370dp"
+                android:layout_height="65dp"
+                android:foregroundGravity="center">
+
+                <RadioGroup
+                    android:id="@+id/emotionGroup"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="0dp"
+                    android:layout_marginLeft="0dp"
+                    android:layout_marginRight="0dp"
+                    android:layout_marginTop="0dp"
+                    android:checkedButton="@+id/normalButton"
+                    android:foregroundGravity="center"
+                    android:orientation="horizontal">
+
+                    <RadioButton
+                        android:id="@+id/veryHappyButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/heart_eyes_emoji"
+                        android:backgroundTint="@drawable/alpha_radio_button"
+                        android:backgroundTintMode="src_atop"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/happyButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/slightly_smiling_face_emoji"
+                        android:backgroundTint="@drawable/alpha_radio_button"
+                        android:backgroundTintMode="src_atop"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/normalButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/confused_face_emoji"
+                        android:backgroundTint="@drawable/alpha_radio_button"
+                        android:backgroundTintMode="src_atop"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/sadButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/sad_face_emoji"
+                        android:backgroundTint="@drawable/alpha_radio_button"
+                        android:backgroundTintMode="src_atop"
+                        android:button="@null" />
+
+                    <RadioButton
+                        android:id="@+id/verySadButton"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_marginLeft="5dp"
+                        android:layout_marginRight="5dp"
+                        android:layout_weight="1"
+                        android:background="@drawable/loudly_crying_face_emoji"
+                        android:backgroundTint="@drawable/alpha_radio_button"
+                        android:backgroundTintMode="src_atop"
+                        android:button="@null" />
+
+                </RadioGroup>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_rect_gradient_background"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Additional Information"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="2"
+                    android:paddingRight="10dp"
+                    android:text="08.07.2001"
+                    android:textAlignment="textEnd"
+                    android:textSize="14sp"
+                    android:textStyle="italic" />
+
+                <ImageButton
+                    android:id="@+id/dateButton"
+                    android:layout_width="25dp"
+                    android:layout_height="25dp"
+                    android:alpha="0.6"
+                    android:background="@drawable/ic_access_time_white_48dp"
+                    android:button="@null" />
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/reasonTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_rect_darkgrey_accent_border"
+                android:ems="10"
+                android:hint="Reason"
+                android:padding="10dp" />
+
+            <FrameLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="10dp">
+
+                <com.makeramen.roundedimageview.RoundedImageView
+                    android:id="@+id/additionalImageView"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/slightly_smiling_face_emoji"
+                    android:visibility="gone"
+                    app:riv_corner_radius="10dp" />
+
+                <ImageButton
+                    android:id="@+id/cameraButton"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:alpha="0.8"
+                    android:background="@null"
+                    android:paddingBottom="20dp"
+                    android:paddingTop="20dp"
+                    app:srcCompat="@drawable/ic_camera_alt_white_48dp" />
+
+            </FrameLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+</android.support.v4.widget.NestedScrollView>

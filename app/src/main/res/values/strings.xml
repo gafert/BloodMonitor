@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Blood Monitor</string>
+    <string name="title_activity_add">Add Entries</string>
+    <string name="action_settings">Settings</string>
 </resources>
