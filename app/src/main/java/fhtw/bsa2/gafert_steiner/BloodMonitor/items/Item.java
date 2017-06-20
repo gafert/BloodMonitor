@@ -9,15 +9,16 @@ public class Item {
     int id;
     Date date;
     Integer mood;
-    String imagePath;
     String reason;
 
-    public Item(int id, Date date, Integer mood, String imagePath, String reason) {
+    public Item(int id, Date date, Integer mood, String reason) {
         this.id = id;
         this.date = date;
         this.mood = mood;
-        this.imagePath = imagePath;
         this.reason = reason;
+        if (reason == null) {
+            this.reason = "";
+        }
     }
 
     public int getId() {
@@ -47,14 +48,6 @@ public class Item {
 
     public void setMood(Integer mood) {
         this.mood = mood;
-    }
-
-    public String getImagePath() {
-        return imagePath;
-    }
-
-    public void setImagePath(String imagePath) {
-        this.imagePath = imagePath;
     }
 
     public String getReason() {

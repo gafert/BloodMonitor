@@ -32,12 +32,12 @@ import java.util.List;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.RecyclerViewMargin;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.ChartMarker;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.DateFormatter;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemArrayAdapter;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.items.RecyclerViewMargin;
 import info.hoang8f.widget.FButton;
 
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_VERY_HAPPY;
@@ -189,7 +189,7 @@ public class MainActivity extends AppCompatActivity {
                 // Colors for styling
                 int[] colors = new int[3];
                 colors[0] = ContextCompat.getColor(this, R.color.colorAccent);
-                colors[1] = ContextCompat.getColor(this, R.color.backGroundGradient1);
+                colors[1] = ContextCompat.getColor(this, R.color.colorPrimary);
 
                 // Make a new data set with entries
                 LineDataSet happinessDateSet = new LineDataSet(happinessEntries, "Happiness");

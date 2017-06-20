@@ -7,12 +7,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.util.Comparator;
 import java.util.List;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
+
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_HAPPY;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_NORMAL;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_SAD;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_VERY_HAPPY;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_VERY_SAD;
 
 public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.ViewHolder> {
 
@@ -77,7 +84,31 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int listPosition) {
         holder.dateView.setText(mSortedList.get(listPosition).getDateString());
-        holder.reasonView.setText(mSortedList.get(listPosition).getReason());
+
+        if (mSortedList.get(listPosition).getReason() == null ||
+                mSortedList.get(listPosition).getReason().equals("")) {
+            holder.reasonView.setText("...");
+        } else {
+            holder.reasonView.setText(mSortedList.get(listPosition).getReason());
+        }
+
+        switch (mSortedList.get(listPosition).getMood()) {
+            case FEELING_VERY_HAPPY:
+                holder.emotionImageView.setImageResource(R.drawable.heart_eyes_emoji);
+                break;
+            case FEELING_HAPPY:
+                holder.emotionImageView.setImageResource(R.drawable.slightly_smiling_face_emoji);
+                break;
+            case FEELING_SAD:
+                holder.emotionImageView.setImageResource(R.drawable.sad_face_emoji);
+                break;
+            case FEELING_NORMAL:
+                holder.emotionImageView.setImageResource(R.drawable.confused_face_emoji);
+                break;
+            case FEELING_VERY_SAD:
+                holder.emotionImageView.setImageResource(R.drawable.loudly_crying_face_emoji);
+                break;
+        }
     }
 
     // get the size of the list
@@ -122,11 +153,13 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView dateView;
         public TextView reasonView;
+        public ImageView emotionImageView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             dateView = (TextView) itemView.findViewById(R.id.dateTextView);
             reasonView = (TextView) itemView.findViewById(R.id.reasonTextView);
+            emotionImageView = (ImageView) itemView.findViewById(R.id.emotionImageView);
         }
 
         @Override

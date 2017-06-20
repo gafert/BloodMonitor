@@ -22,48 +22,40 @@
 
             <ImageView
                 android:id="@+id/emotionImageView"
-                android:layout_width="100dp"
+                android:layout_width="50dp"
                 android:layout_height="50dp"
-                android:layout_marginRight="10dp"
-                android:layout_weight="1"
                 android:scaleType="fitCenter"
                 app:srcCompat="@drawable/confused_face_emoji" />
 
-            <ImageView
-                android:id="@+id/additionalImageView"
-                android:layout_width="match_parent"
-                android:layout_height="50dp"
-                android:layout_weight="1"
-                android:scaleType="centerCrop" />
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:orientation="vertical">
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:text="Monday 8. July 2017"
+                    android:textColor="@color/grey" />
+
+                <TextView
+                    android:id="@+id/reasonTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginRight="10dp"
+                    android:layout_marginTop="5dp"
+                    android:text="No Reason"
+                    android:visibility="visible" />
+
+            </LinearLayout>
 
         </LinearLayout>
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
-            android:orientation="vertical">
-
-            <TextView
-                android:id="@+id/dateTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:text="Monday 8. July 2017"
-                android:textColor="@color/grey" />
-
-            <TextView
-                android:id="@+id/reasonTextView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:layout_marginRight="10dp"
-                android:layout_marginTop="5dp"
-                android:text="No Reason"
-                android:visibility="visible" />
-
-        </LinearLayout>
 
     </LinearLayout>
 

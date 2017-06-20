@@ -1,4 +1,4 @@
-package fhtw.bsa2.gafert_steiner.BloodMonitor;
+package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
 import android.graphics.Rect;
 import android.support.annotation.IntRange;
@@ -32,10 +32,6 @@ public class RecyclerViewMargin extends RecyclerView.ItemDecoration {
         outRect.right = margin;
         //set bottom margin to all
         outRect.top = margin;
-        //we only add top margin to the first row
-        if (position > columns + 1) {
-            outRect.bottom = margin;
-        }
         //add left margin only to the first column
         if (position % columns == 0) {
             outRect.left = margin;

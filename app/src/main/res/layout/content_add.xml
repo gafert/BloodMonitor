@@ -169,32 +169,6 @@
                 android:hint="Reason"
                 android:padding="10dp" />
 
-            <FrameLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_marginTop="10dp">
-
-                <com.makeramen.roundedimageview.RoundedImageView
-                    android:id="@+id/additionalImageView"
-                    android:layout_width="match_parent"
-                    android:layout_height="300dp"
-                    android:scaleType="centerCrop"
-                    android:src="@drawable/slightly_smiling_face_emoji"
-                    android:visibility="gone"
-                    app:riv_corner_radius="10dp" />
-
-                <ImageButton
-                    android:id="@+id/cameraButton"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:alpha="0.8"
-                    android:background="@null"
-                    android:paddingBottom="20dp"
-                    android:paddingTop="20dp"
-                    app:srcCompat="@drawable/ic_camera_alt_white_48dp" />
-
-            </FrameLayout>
 
         </LinearLayout>
 
