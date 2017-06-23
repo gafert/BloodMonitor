@@ -30,7 +30,7 @@ public class DateFormatter implements IAxisValueFormatter {
             try {
                 Item emotionEntry = items.get((int) value);
                 SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E d. MMM");
-                Date date = emotionEntry.getDate();
+                Date date = emotionEntry.getTimestamp();
                 newDate = simpleDateFormat.format(date);                                           // Set the date to the text
             } catch (Exception e) {
                 //Log.e("AddFragment", "onDateSet: Could not parse to date string");

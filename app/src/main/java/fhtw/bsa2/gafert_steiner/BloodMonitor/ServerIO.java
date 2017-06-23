@@ -26,6 +26,8 @@ public class ServerIO {
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json;charset=utf-8");
             con.setRequestProperty("User-Agent", "BSA");
+            con.setConnectTimeout(5000);
+            con.setReadTimeout(5000);
 
             // Send POST output
             OutputStream printout = new BufferedOutputStream(con.getOutputStream());

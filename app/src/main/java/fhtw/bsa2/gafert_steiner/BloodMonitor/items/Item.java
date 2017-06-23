@@ -5,18 +5,26 @@ import java.util.Date;
 
 
 public class Item {
-    int id;
-    Date date;
-    Integer mood;
-    String reason;
+    private int id;
+    private Date date;
+    private Integer mood;
+    private String reason;
 
-    public Item(Date date, Integer mood, String reason) {
-        this.date = date;
+    public Item(Date timestamp, Integer mood, String reason) {
+        this.date = timestamp;
         this.mood = mood;
         this.reason = reason;
+        this.id = Index.getInstance().getNextID();
         if (reason == null) {
             this.reason = "";
         }
+    }
+
+    public Item(int id, Date timestamp, Integer mood, String reason) {
+        this.date = timestamp;
+        this.mood = mood;
+        this.reason = reason;
+        this.id = id;
     }
 
     public int getId() {
@@ -27,11 +35,11 @@ public class Item {
         this.id = id;
     }
 
-    public Date getDate() {
+    public Date getTimestamp() {
         return date;
     }
 
-    public void setDate(Date entryDate) {
+    public void setTimestamp(Date entryDate) {
         this.date = entryDate;
     }
 

@@ -1,13 +1,15 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
+import android.content.Context;
 import android.support.annotation.Nullable;
 import android.util.Log;
-
-import com.google.gson.Gson;
+import android.widget.Toast;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
@@ -18,23 +20,37 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit;
  */
 
 public class ItemHolder {
-    private static final ItemHolder ourInstance = new ItemHolder();
+    private static final String TAG = "ItemHolder";
+    private static ItemHolder ourInstance = null;
+    private Context context;
     private List<Item> items;
     private List<ItemsChangedListener> listener;
 
-    private ItemHolder() {
-        items = new ArrayList<>();
-        listener = new ArrayList<>();
+    private ItemHolder(Context context) {
+        this.items = new ArrayList<>();
+        this.listener = new ArrayList<>();
+        this.context = context;
     }
 
     @Nullable
     public static ItemHolder getInstance() {
+        if (ourInstance == null) {
+            Log.e(TAG, "getInstance: Context not set");
+        }
+        return ourInstance;
+    }
+
+    public static ItemHolder getInstance(Context context) {
+        ourInstance = new ItemHolder(context);
         return ourInstance;
     }
 
     public List<Item> getItems() {
         if (items.isEmpty()) {
-            loadFromFile();
+            ArrayList<Item> items = FileIO.getInstance().readListFile();
+            if (items != null) {
+                setItems(items);
+            }
         }
         return items;
     }
@@ -47,65 +63,56 @@ public class ItemHolder {
         }
     }
 
-    public void loadFromFile() {
-        // Load Entries from file
-        FileIO fileIO = FileIO.getInstance();
-        String emotionJson = fileIO.readFile();
-
-        if (emotionJson != null) {
-            setItems((ArrayList<Item>) new Gson().fromJson(emotionJson, GlobalShit.ITEM_LIST_TYPE_TOKEN));
-        }
-    }
-
     public void setDummyItems() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         try {
             add(new Item(sdf.parse("070501"), GlobalShit.FEELING_HAPPY, "I am a dummy dateView and have no feels..."));
         } catch (ParseException e) {
-            Log.e("ItemHolder", "setDummyItems: Could not set dummy items");
+            Log.e("ItemHolder", "setDummyItems: Could not set dummy item");
         }
     }
 
-    public void add(Item newEntry) {
+    public boolean add(Item newEntry) {
         // Replace already set item by date
-        int i = 0;
         boolean duplicate = false;
-        /*for (Item entry : items) {
-            if (newEntry.getDate().equals(entry.getDate())) {
+        for (Item entry : items) {
+            if (newEntry.getTimestamp().equals(entry.getTimestamp())) {
                 duplicate = true;
                 break;
             }
-            i++;
-        }*/
-        if (duplicate == true) {
-            items.set(i, newEntry);
+        }
+
+        if (duplicate) {
+            Toast.makeText(context, "Already saved with this date", Toast.LENGTH_SHORT).show();
         } else {
-            // Assign a index add at it to the array
-            newEntry.setId(items.size());
+            // newEntry.setId(items.size());
             items.add(newEntry);
-        }
 
-        /*Collections.sort(items, new Comparator<Item>() {
-            public int compare(Item o1, Item o2) {
-                return o1.getDate().compareTo(o2.getDate());
+            // Fire the custom listener
+            if (listener != null) {
+                for (ItemsChangedListener _listener : listener)
+                    _listener.onChanged();   // Call listener
             }
-        });*/
 
-        // Fire the custom listener
-        if (listener != null) {
-            for (ItemsChangedListener _listener : listener)
-                _listener.onChanged();   // Call listener
+            FileIO.getInstance().saveListFile(items);
+            FileIO.getInstance().saveToServer(newEntry);
         }
 
-        FileIO.getInstance().save(items, newEntry);
+        Collections.sort(items, new Comparator<Item>() {
+            public int compare(Item o1, Item o2) {
+                return o1.getTimestamp().compareTo(o2.getTimestamp());
+            }
+        });
+
+        return !duplicate;
     }
 
     public void deleteLocalFiles() {
-        items = new ArrayList<>();
+        items.clear();
 
         // Deletes all Files
         FileIO IO = FileIO.getInstance();
-        IO.deleteFile();
+        IO.deleteFiles();
 
         // Fire the custom listener
         if (listener != null)
@@ -120,4 +127,5 @@ public class ItemHolder {
     public interface ItemsChangedListener {
         void onChanged();
     }
+
 }

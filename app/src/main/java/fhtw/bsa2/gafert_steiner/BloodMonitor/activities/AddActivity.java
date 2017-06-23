@@ -127,28 +127,27 @@ public class AddActivity extends AppCompatActivity {
             public void onClick(View v) {
                 String addInf = reasonTextView.getText().toString();
                 Item item = new Item(date, emotionValue, addInf);
-                ItemHolder.getInstance().add(item);
+                if (ItemHolder.getInstance().add(item)) {
+                    // Reset Add site
+                    emotionPicker.check(R.id.normalButton);
+                    reasonTextView.setText(null);
 
-                // Reset Add site
-                emotionPicker.check(R.id.normalButton);
-                reasonTextView.setText(null);
+                    // Created a new Dialog
+                    final Dialog submitDialog = new Dialog(AddActivity.this, R.style.BetterDialog);
+                    submitDialog.setContentView(R.layout.dialog_submit);
+                    submitDialog.show();
 
-                // Created a new Dialog
-                final Dialog submitDialog = new Dialog(AddActivity.this, R.style.BetterDialog);
-                submitDialog.setContentView(R.layout.dialog_submit);
-                submitDialog.show();
+                    // Hide Dialog after certain time
+                    final Handler handler = new Handler();
+                    handler.postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            submitDialog.dismiss();
+                            AddActivity.this.finish();
+                        }
+                    }, 1000);
 
-                // Hide Dialog after certain time
-                final Handler handler = new Handler();
-                handler.postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        submitDialog.dismiss();
-                        AddActivity.this.finish();
-                    }
-                }, 1000);
-
-                //Toasty.warning(getContext(), "Saving not yet implemented", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }

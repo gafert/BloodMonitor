@@ -36,6 +36,7 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.ChartMarker;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.DateFormatter;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Index;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemArrayAdapter;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
@@ -50,7 +51,7 @@ public class MainActivity extends AppCompatActivity {
     private static final Comparator<Item> DATE_COMPARATOR = new Comparator<Item>() {
         @Override
         public int compare(Item a, Item b) {
-            return b.getDate().compareTo(a.getDate());
+            return b.getTimestamp().compareTo(a.getTimestamp());
         }
     };
 
@@ -71,13 +72,17 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        // Setup Singletons
+        FileIO.getInstance(getApplicationContext());
+        Index.getInstance(getApplicationContext());
+        ItemHolder.getInstance(getApplicationContext());
+
+        // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         final AppBarLayout appBar = (AppBarLayout) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Chart");
-
-        // Read and write access via context
-        FileIO.getInstance(getApplicationContext());
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         final ItemArrayAdapter itemArrayAdapter = new ItemArrayAdapter(this, R.layout.example_recycler_view_element, DATE_COMPARATOR);
@@ -133,10 +138,10 @@ public class MainActivity extends AppCompatActivity {
                 return false;
             }
         });
+
         searchEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
-
             }
 
             @Override
@@ -148,7 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-
             }
         });
 
@@ -156,17 +160,12 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
         return true;
     }
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
-
         switch (item.getItemId()) {
             case R.id.menu_add_dummy:
                 ItemHolder.getInstance().setDummyItems();
@@ -179,7 +178,6 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
                 break;
         }
-
         return super.onOptionsItemSelected(item);
     }
 

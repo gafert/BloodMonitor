@@ -19,6 +19,18 @@ public class GlobalShit {
     public final static int FEELING_SAD = -10;
     public final static int FEELING_VERY_SAD = -20;
 
+    public static final String INDEX_PREF = "indexpref";
+    public static final String SETTINGS = "IpPrefs";
+    public static final String IP_PREF = "postIp";
+    public static final String PORT_PREF = "port";
+    public static final String POST_DIRECTORY_PREF = "postDirectory";
+    public static final String GET_DIRECTORY_PREF = "getDirectory";
+    public static final String GET_URL_PREF = "getUrl";
+    public static final String POST_URL_PREF = "postUrl";
+
+    public static final String ITEMS_FILE = "items.txt";
+    public static final String NOT_ON_SERVER_FILE = "Not_on_server.txt";
+
     public static final Type ITEM_LIST_TYPE_TOKEN = new TypeToken<ArrayList<Item>>() {
     }.getType();
 
