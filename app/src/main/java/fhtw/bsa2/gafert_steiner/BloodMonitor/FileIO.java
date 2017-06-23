@@ -1,8 +1,12 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Environment;
 import android.util.Log;
+
+import com.google.gson.Gson;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
@@ -12,20 +16,28 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+
+import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
+
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.activities.SettingsActivity.POSTURL_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.activities.SettingsActivity.SETTINGS;
 
 /**
  * Created by michi on 19.06.17.
  */
 
 public class FileIO {
-    private static FileIO ourInstance = null;
     private static final String FILENAME = "documents.txt";
-    private final Context context;
+    private static FileIO ourInstance = null;
     private static File dataFile;
+    private final Context context;
     private final String TAG = "FileIO";
+    private SharedPreferences settings;
 
     private FileIO(Context context) {
         this.context = context;
+        this.settings = context.getSharedPreferences(SETTINGS, 0);
     }
 
     public static FileIO getInstance() {
@@ -34,6 +46,7 @@ public class FileIO {
 
     public static FileIO getInstance(Context context) {
         if (ourInstance == null) {
+
             ourInstance = new FileIO(context);
         }
         return ourInstance;
@@ -57,24 +70,22 @@ public class FileIO {
                 Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
     }
 
-    public void writeFile(String jsonString) {
+    public void save(List<Item> items, Item newItem) {
+        String itemsJsonString = new Gson().toJson(items, GlobalShit.ITEM_LIST_TYPE_TOKEN);
+        String newItemjsonString = new Gson().toJson(newItem, GlobalShit.ITEM_TYPE_TOKEN);
+        Log.d(TAG, "save: " + itemsJsonString);
+
+        // Save to local file
         if (isExternalStorageWritable()) {
             try {
-                getFile();
-
-                if (dataFile.exists()) {
-                    dataFile.delete();
-                }
-
+                deleteFile();
                 getFile();
                 dataFile.createNewFile();
-
-                Log.d(TAG, "writeToFile(): " + jsonString);
 
                 BufferedWriter bw = new BufferedWriter(new FileWriter(dataFile, true));
                 PrintWriter writer = new PrintWriter(bw);
 
-                writer.println(jsonString);
+                writer.println(itemsJsonString);
                 writer.flush();
                 writer.close();
             } catch (FileNotFoundException e) {
@@ -83,6 +94,9 @@ public class FileIO {
                 e.printStackTrace();
             }
         }
+
+
+        new AsyncPost().execute(newItemjsonString);
     }
 
     public String readFile() {
@@ -108,9 +122,20 @@ public class FileIO {
         if (dataFile.exists()) {
             dataFile.delete();
         }
-
-        File photoDirectory = new File(context.getExternalFilesDir(
-                Environment.DIRECTORY_PICTURES).getPath());
-        photoDirectory.delete();
     }
+
+    public class AsyncPost extends AsyncTask<Object, String, String> {
+        @Override
+        protected String doInBackground(Object... object) {
+            // Start REST and parse to json
+            String jsonString = (String) object[0];
+
+            return ServerIO.saveToServer(settings.getString(POSTURL_PREF, null), jsonString);
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+        }
+    }
+
 }

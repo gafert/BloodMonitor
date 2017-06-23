@@ -5,14 +5,12 @@ import java.util.Date;
 
 
 public class Item {
-
     int id;
     Date date;
     Integer mood;
     String reason;
 
-    public Item(int id, Date date, Integer mood, String reason) {
-        this.id = id;
+    public Item(Date date, Integer mood, String reason) {
         this.date = date;
         this.mood = mood;
         this.reason = reason;

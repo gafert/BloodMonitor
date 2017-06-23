@@ -19,8 +19,9 @@ public class GlobalShit {
     public final static int FEELING_SAD = -10;
     public final static int FEELING_VERY_SAD = -20;
 
-    public final static int REQUEST_IMAGE_CAPTURE = 1;
-    public static final int REQUEST_TAKE_PHOTO = 1;
-    public static final Type listType = new TypeToken<ArrayList<Item>>() {
+    public static final Type ITEM_LIST_TYPE_TOKEN = new TypeToken<ArrayList<Item>>() {
+    }.getType();
+
+    public static final Type ITEM_TYPE_TOKEN = new TypeToken<Item>() {
     }.getType();
 }

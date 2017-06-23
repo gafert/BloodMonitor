@@ -126,7 +126,7 @@ public class AddActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String addInf = reasonTextView.getText().toString();
-                Item item = new Item(1, date, emotionValue, addInf);
+                Item item = new Item(date, emotionValue, addInf);
                 ItemHolder.getInstance().add(item);
 
                 // Reset Add site

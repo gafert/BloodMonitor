@@ -172,7 +172,11 @@ public class MainActivity extends AppCompatActivity {
                 ItemHolder.getInstance().setDummyItems();
                 break;
             case R.id.menu_clear:
-                ItemHolder.getInstance().deleteAll();
+                ItemHolder.getInstance().deleteLocalFiles();
+                break;
+            case R.id.menu_settings:
+                Intent settingsIntent = new Intent(this, SettingsActivity.class);
+                startActivity(settingsIntent);
                 break;
         }
 
