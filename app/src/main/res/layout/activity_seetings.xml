@@ -78,7 +78,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
-                        android:text="8080" />
+                        android:text="3000" />
 
                 </TableRow>
 
@@ -101,7 +101,9 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
-                        android:text="/rest/items/vital_data/add" />
+                        android:editable="false"
+                        android:text="/posts"
+                        android:textColor="#8effffff" />
                 </TableRow>
 
                 <TableRow
@@ -123,8 +125,10 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_weight="6"
+                        android:editable="false"
                         android:ems="10"
-                        android:text="/rest/items" />
+                        android:text="/posts"
+                        android:textColor="#8effffff" />
                 </TableRow>
             </TableLayout>
         </LinearLayout>

@@ -177,6 +177,9 @@ public class MainActivity extends AppCompatActivity {
                 Intent settingsIntent = new Intent(this, SettingsActivity.class);
                 startActivity(settingsIntent);
                 break;
+            case R.id.menu_sync:
+                FileIO.getInstance().sync();
+                break;
         }
         return super.onOptionsItemSelected(item);
     }

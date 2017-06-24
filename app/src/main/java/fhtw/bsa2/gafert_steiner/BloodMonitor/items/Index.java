@@ -35,10 +35,13 @@ public class Index {
     }
 
     public int getNextID() {
-        SharedPreferences.Editor editor = settings.edit();
-        editor.putInt(INDEX_PREF, index++);
-        editor.commit();
+        index = index + 1;
 
+        SharedPreferences.Editor editor = settings.edit();
+        editor.putInt(INDEX_PREF, index);
+        editor.apply();
+
+        Log.d(TAG, "getNextID: Index=" + index);
         return index;
     }
 }

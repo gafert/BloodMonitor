@@ -4,7 +4,7 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.3"
     defaultConfig {
-        applicationId "fhtw.bsa2.gafert_steiner.coordinatorlayouttest"
+        applicationId "fhtw.bsa2.gafert_steiner.bloodmonitor"
         minSdkVersion 22
         targetSdkVersion 25
         versionCode 1

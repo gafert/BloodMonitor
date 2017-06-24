@@ -12,7 +12,6 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
  */
 
 public class GlobalShit {
-    // Static Values for the feeling
     public final static int FEELING_VERY_HAPPY = 20;
     public final static int FEELING_HAPPY = 10;
     public final static int FEELING_NORMAL = 0;
@@ -28,8 +27,8 @@ public class GlobalShit {
     public static final String GET_URL_PREF = "getUrl";
     public static final String POST_URL_PREF = "postUrl";
 
-    public static final String ITEMS_FILE = "items.txt";
-    public static final String NOT_ON_SERVER_FILE = "Not_on_server.txt";
+    public static final String ITEMS_FILE = "Items.json";
+    public static final String NOT_ON_SERVER_FILE = "Not_saved.json";
 
     public static final Type ITEM_LIST_TYPE_TOKEN = new TypeToken<ArrayList<Item>>() {
     }.getType();

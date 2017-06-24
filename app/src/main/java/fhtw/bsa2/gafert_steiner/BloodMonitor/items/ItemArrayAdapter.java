@@ -83,7 +83,9 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int listPosition) {
-        holder.dateView.setText(mSortedList.get(listPosition).getDateString());
+        Item _item = mSortedList.get(listPosition);
+        holder.dateView.setText(_item.getDateString());
+        holder.idView.setText(String.valueOf(_item.getId()));
 
         if (mSortedList.get(listPosition).getReason() == null ||
                 mSortedList.get(listPosition).getReason().equals("")) {
@@ -92,22 +94,29 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
             holder.reasonView.setText(mSortedList.get(listPosition).getReason());
         }
 
-        switch (mSortedList.get(listPosition).getMood()) {
-            case FEELING_VERY_HAPPY:
-                holder.emotionImageView.setImageResource(R.drawable.heart_eyes_emoji);
-                break;
-            case FEELING_HAPPY:
-                holder.emotionImageView.setImageResource(R.drawable.slightly_smiling_face_emoji);
-                break;
-            case FEELING_SAD:
-                holder.emotionImageView.setImageResource(R.drawable.sad_face_emoji);
-                break;
-            case FEELING_NORMAL:
-                holder.emotionImageView.setImageResource(R.drawable.confused_face_emoji);
-                break;
-            case FEELING_VERY_SAD:
-                holder.emotionImageView.setImageResource(R.drawable.loudly_crying_face_emoji);
-                break;
+        if (mSortedList.get(listPosition).getMood() != null) {
+            switch (mSortedList.get(listPosition).getMood()) {
+                case FEELING_VERY_HAPPY:
+                    holder.emotionImageView.setImageResource(R.drawable.heart_eyes_emoji);
+                    break;
+                case FEELING_HAPPY:
+                    holder.emotionImageView.setImageResource(R.drawable.slightly_smiling_face_emoji);
+                    break;
+                case FEELING_SAD:
+                    holder.emotionImageView.setImageResource(R.drawable.sad_face_emoji);
+                    break;
+                case FEELING_NORMAL:
+                    holder.emotionImageView.setImageResource(R.drawable.confused_face_emoji);
+                    break;
+                case FEELING_VERY_SAD:
+                    holder.emotionImageView.setImageResource(R.drawable.loudly_crying_face_emoji);
+                    break;
+                default:
+                    holder.emotionImageView.setImageResource(R.drawable.slightly_smiling_face_emoji);
+                    break;
+            }
+        } else {
+            holder.emotionImageView.setImageResource(R.drawable.slightly_smiling_face_emoji);
         }
     }
 
@@ -154,12 +163,14 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         public TextView dateView;
         public TextView reasonView;
         public ImageView emotionImageView;
+        public TextView idView;
 
         public ViewHolder(View itemView) {
             super(itemView);
             dateView = (TextView) itemView.findViewById(R.id.dateTextView);
             reasonView = (TextView) itemView.findViewById(R.id.reasonTextView);
             emotionImageView = (ImageView) itemView.findViewById(R.id.emotionImageView);
+            idView = (TextView) itemView.findViewById(R.id.idTextView);
         }
 
         @Override

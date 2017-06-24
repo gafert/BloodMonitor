@@ -15,7 +15,7 @@ public class ServerIO {
     private final static String TAG = "ServerIO";
 
     public static String saveToServer(String url, String jsonString) {
-        Log.d(TAG, "saveToServer: Url=" + url);
+        Log.d(TAG, "writeToServer: Url=" + url);
         String result = null;
 
         try {
@@ -61,6 +61,9 @@ public class ServerIO {
             HttpURLConnection con = (HttpURLConnection) mUrl.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "BSA");
+            con.setConnectTimeout(5000);
+            con.setReadTimeout(5000);
+
             int responseCode = con.getResponseCode();
             // Handling of response code should be added here …
             Log.d("ServerIO", "HTTP Response: " + responseCode); // 200 OK
