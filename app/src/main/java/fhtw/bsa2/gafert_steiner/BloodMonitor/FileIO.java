@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Environment;
+import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -27,7 +28,6 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
 
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.GET_URL_PREF;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.ITEMS_FILE;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.NOT_ON_SERVER_FILE;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
@@ -41,16 +41,16 @@ public class FileIO {
     private static FileIO ourInstance = null;
 
     private static File itemsFile;      // All items file
-    private static File tmpFile;        // Not yet saved items file (tmp file); Will be deleted when all are saved
-    private List<Item> queue;
 
     private Context context;
     private SharedPreferences settings;
 
+    private boolean showToasts = false;
+    private boolean isAdding = false;
+
     private FileIO(Context context) {
         this.context = context;
         this.settings = context.getSharedPreferences(SETTINGS, 0);
-        this.queue = readTmpFile();
     }
 
     public static FileIO getInstance() {
@@ -73,34 +73,16 @@ public class FileIO {
                 Environment.DIRECTORY_DOCUMENTS), ITEMS_FILE);
     }
 
-    private void getTmpFile() throws IOException {
-        // Get the directory for the app's private pictures directory.
-        tmpFile = new File(context.getExternalFilesDir(
-                Environment.DIRECTORY_DOCUMENTS), NOT_ON_SERVER_FILE);
-    }
-
     private void deleteItemFile() {
         if (itemsFile.exists()) {
             itemsFile.delete();
         }
     }
 
-    private void deleteTmpFile() {
-        if (tmpFile.exists()) {
-            tmpFile.delete();
-        }
-    }
-
     public void deleteFiles() {
-        if (tmpFile.exists()) {
-            tmpFile.delete();
-        }
         if (itemsFile.exists()) {
             itemsFile.delete();
         }
-        // Clear also the items which have not yet been
-        // Uploaded to the server
-        queue.clear();
     }
 
     public boolean isExternalStorageWritable() {
@@ -116,7 +98,6 @@ public class FileIO {
 
     /**
      * Reads all items from the save file
-     *
      * @return Parsed ArrayList of Item
      */
     public ArrayList<Item> readItemFile() {
@@ -171,60 +152,9 @@ public class FileIO {
      * @param item Item to append to server
      */
     public void writeToServer(Item item) {
+        this.isAdding = true;
+        Toasty.info(context, "Trying to send Item to server", Toast.LENGTH_SHORT).show();
         new AsyncPost().execute(item);
-    }
-
-    /**
-     * Read the temporary file where items which are not yet saved on the server are saved
-     *
-     * @return Parsed ArrayList of Items not synced to server
-     */
-    private ArrayList<Item> readTmpFile() {
-        String jsonString = null;
-        if (isExternalStorageReadable()) {
-            try {
-                getTmpFile();
-                if (tmpFile.exists() && tmpFile.length() != 0) {
-                    BufferedReader reader = new BufferedReader(new FileReader(tmpFile));
-                    jsonString = reader.readLine();
-                    reader.close();
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        ArrayList<Item> _items = new Gson().fromJson(jsonString, Constants.ITEM_LIST_TYPE_TOKEN);
-        if (_items != null) {
-            return _items;
-        } else {
-            return new ArrayList<>();
-        }
-    }
-
-    /**
-     * Write temporary file to save Items which have not yet been uploaded to the server
-     *
-     * @param items A List of Items which have not been appended to the server
-     * @return Was the creation/writing of the file successful
-     */
-    private boolean writeTmpFile(List<Item> items) {
-        String itemsJsonString = new Gson().toJson(items, Constants.ITEM_LIST_TYPE_TOKEN);
-        if (isExternalStorageWritable()) {
-            try {
-                deleteTmpFile();
-                getTmpFile();
-                tmpFile.createNewFile();
-                BufferedWriter bw = new BufferedWriter(new FileWriter(tmpFile, true));
-                PrintWriter writer = new PrintWriter(bw);
-                writer.println(itemsJsonString);
-                writer.flush();
-                writer.close();
-                return true;
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
     }
 
     /**
@@ -233,22 +163,16 @@ public class FileIO {
      * Posts all not yet synced items to the server
      * Gets all data from server and compares ids
      */
-    public void sync() {
-        Toasty.normal(context, "Synchronising", Toast.LENGTH_SHORT).show();
-
-        // Create a new list of the not synced items
-        // and clear the old one to prevent duplication
-        List<Item> _tmp = new ArrayList<>();
-        _tmp.addAll(queue);
-        queue.clear();
-
-        // Delete the file as there are no elements "not synced"
-        deleteTmpFile();
-
-        // Try to sync all of them
-        for (Item _oldItem : _tmp) {
-            new AsyncPost().execute(_oldItem);
+    public void sync(@Nullable Boolean showToasts) {
+        isAdding = false;
+        if (showToasts == null) {
+            this.showToasts = false;
+        } else {
+            this.showToasts = showToasts;
         }
+
+        if (this.showToasts)
+            Toasty.info(context, "Synchronising", Toast.LENGTH_SHORT).show();
 
         // Load from Server and compare
         new AsyncGet().execute();
@@ -284,18 +208,17 @@ public class FileIO {
 
             if (result != null) {
                 Log.d(TAG, "Sent Item to server");
-                sync();
+                if (isAdding)
+                    Toasty.success(context, "Synchronised", Toast.LENGTH_SHORT).show();
+                isAdding = false;
+
+                sync(false);
 
             } else {
                 // Sync has failed
-                Log.d(TAG, "Could not send to server, Item will be added to the queue");
-                Toasty.error(context, "Could not synchronise", Toast.LENGTH_SHORT).show();
-                // Add the not synced item to the list and save it
-                // Check if the item is already in the queue
-                if (!queue.contains(_item)) {
-                    queue.add(_item);
-                    writeTmpFile(queue);
-                }
+                if (isAdding)
+                    Toasty.warning(context, "Could not send item to server\nThe Item will be uploaded later", Toast.LENGTH_LONG).show();
+                isAdding = false;
             }
         }
     }
@@ -358,11 +281,13 @@ public class FileIO {
                     }
 
                 }
-                Toasty.success(context, "Synchronised", Toast.LENGTH_SHORT).show();
+                if (showToasts)
+                    Toasty.success(context, "Synchronised", Toast.LENGTH_SHORT).show();
             } else {
                 // Could not sync
                 Log.d(TAG, "Could not synchronise");
-                Toasty.error(context, "Could not synchronise", Toast.LENGTH_SHORT).show();
+                if (showToasts)
+                    Toasty.error(context, "Could not synchronise", Toast.LENGTH_SHORT).show();
             }
         }
     }

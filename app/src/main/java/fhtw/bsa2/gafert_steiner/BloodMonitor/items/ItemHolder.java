@@ -1,20 +1,17 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
 import android.content.Context;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.widget.Toast;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
-import fhtw.bsa2.gafert_steiner.BloodMonitor.Constants;
+import es.dmoral.toasty.Toasty;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 
 public class ItemHolder {
@@ -87,18 +84,6 @@ public class ItemHolder {
         }
     }
 
-    public void setDummyItems() {
-        SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
-        try {
-            Location location = new Location("");
-            location.setLongitude(0);
-            location.setLatitude(0);
-            add(new Item(location, sdf.parse("070501"), Constants.FEELING_HAPPY, "I am a dummy dateView and have no feels..."));
-        } catch (ParseException e) {
-            Log.e("ItemHolder", "setDummyItems: Could not set dummy item");
-        }
-    }
-
     /**
      * Adds an Item to the list
      * Tries to write it to a file
@@ -119,7 +104,7 @@ public class ItemHolder {
         }
 
         if (duplicate) {
-            Toast.makeText(context, "Already saved with this date", Toast.LENGTH_SHORT).show();
+            Toasty.warning(context, "Already added Item with this Date", Toast.LENGTH_SHORT).show();
         } else {
             // newEntry.setId(items.size());
             items.add(newEntry);

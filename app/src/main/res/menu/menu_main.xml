@@ -4,8 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="fhtw.bsa2.gafert_steiner.BloodMonitor.activities.MainActivity">
     <item
-        android:id="@+id/menu_add_dummy"
-        android:title="Add Dummy Entries"
+        android:id="@+id/menu_settings"
+        android:title="Settings"
         app:showAsAction="never" />
 
     <item
@@ -14,12 +14,7 @@
         app:showAsAction="never" />
 
     <item
-        android:id="@+id/menu_settings"
-        android:title="Settings"
-        app:showAsAction="never" />
-
-    <item
         android:id="@+id/menu_sync"
-        android:title="Sync"
+        android:title="Synchronise"
         app:showAsAction="never" />
 </menu>

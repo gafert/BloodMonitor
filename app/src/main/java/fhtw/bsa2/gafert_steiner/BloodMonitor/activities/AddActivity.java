@@ -160,7 +160,7 @@ public class AddActivity extends AppCompatActivity {
                     return;
                 }
                 // Get Location
-                // If got -> make Item add add it to the itemHolder
+                // If got -> make Item add it to the itemHolder
                 FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(AddActivity.this);
                 mFusedLocationClient.getLastLocation().addOnCompleteListener(AddActivity.this, new OnCompleteListener<Location>() {
                     @Override
@@ -201,6 +201,6 @@ public class AddActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        FileIO.getInstance().sync();
+        FileIO.getInstance().sync(false);
     }
 }

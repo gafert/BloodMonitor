@@ -26,8 +26,8 @@ public class ServerIO {
             con.setRequestMethod("POST");
             con.setRequestProperty("Content-Type", "application/json;charset=utf-8");
             con.setRequestProperty("User-Agent", "BSA");
-            con.setConnectTimeout(5000);
-            con.setReadTimeout(5000);
+            con.setConnectTimeout(1000);
+            con.setReadTimeout(1000);
 
             // Send POST output
             OutputStream printout = new BufferedOutputStream(con.getOutputStream());
@@ -61,8 +61,8 @@ public class ServerIO {
             HttpURLConnection con = (HttpURLConnection) mUrl.openConnection();
             con.setRequestMethod("GET");
             con.setRequestProperty("User-Agent", "BSA");
-            con.setConnectTimeout(5000);
-            con.setReadTimeout(5000);
+            con.setConnectTimeout(1000);
+            con.setReadTimeout(1000);
 
             int responseCode = con.getResponseCode();
             // Handling of response code should be added here …

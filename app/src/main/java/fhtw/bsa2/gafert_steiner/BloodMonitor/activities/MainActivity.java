@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
         FileIO.getInstance(getApplicationContext());
         IdentificationGenerator.getInstance(getApplicationContext());
         ItemHolder.getInstance(getApplicationContext());
-        FileIO.getInstance().sync();
+        FileIO.getInstance().sync(true);
 
         // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -175,9 +175,6 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
-            case R.id.menu_add_dummy:
-                ItemHolder.getInstance().setDummyItems();
-                break;
             case R.id.menu_clear:
                 ItemHolder.getInstance().deleteLocalFiles();
                 break;
@@ -186,7 +183,7 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(settingsIntent);
                 break;
             case R.id.menu_sync:
-                FileIO.getInstance().sync();
+                FileIO.getInstance().sync(true);
                 break;
         }
         return super.onOptionsItemSelected(item);
