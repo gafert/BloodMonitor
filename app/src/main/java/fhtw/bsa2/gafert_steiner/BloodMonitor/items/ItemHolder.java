@@ -66,6 +66,20 @@ public class ItemHolder {
 
     public void merge(@NonNull List<Item> _items) {
         this.items.addAll(_items);
+
+        // Sort the list by timestamp
+        Collections.sort(items, new Comparator<Item>() {
+            @Override
+            public int compare(Item a, Item b) {
+                try {
+                    return a.getTimestamp().compareTo(b.getTimestamp());
+                } catch (NullPointerException e) {
+                    //e.printStackTrace();
+                }
+                return 0;
+            }
+        });
+
         FileIO.getInstance().writeItemFile(items);
         if (listener != null) {
             for (ItemsChangedListener _listener : listener)
@@ -91,7 +105,7 @@ public class ItemHolder {
      * Tries to post it to the server
      * Calls the change listener
      *
-     * @param newEntry The item wich shall be addded
+     * @param newEntry The item wich shall be added
      * @return Was the Item added = true
      */
     public boolean add(@NonNull Item newEntry) {
@@ -115,11 +129,9 @@ public class ItemHolder {
                 @Override
                 public int compare(Item a, Item b) {
                     try {
-                        return b.getTimestamp().compareTo(a.getTimestamp());
+                        return a.getTimestamp().compareTo(b.getTimestamp());
                     } catch (NullPointerException e) {
-                        if (!ItemHolder.getInstance().getItems().isEmpty()) {
-                            //e.printStackTrace();
-                        }
+                        //e.printStackTrace();
                     }
                     return 0;
                 }

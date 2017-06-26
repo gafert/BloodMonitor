@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
@@ -188,14 +189,18 @@ public class AddActivity extends AppCompatActivity {
                                     }
                                 }, 1000);
                             }
-
                         } else {
                             Log.w("AddActivity", "getLastLocation: exception", task.getException());
                         }
-
                     }
                 });
             }
         });
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        FileIO.getInstance().sync();
     }
 }
