@@ -324,48 +324,41 @@ public class FileIO {
                 List<Item> serverItems = (ArrayList<Item>) gson.fromJson(result, Constants.ITEM_LIST_TYPE_TOKEN);
                 List<Item> localItems = ItemHolder.getInstance().getItems();
 
-                if (!serverItems.isEmpty()) {
-                    if (localItems.isEmpty()) {
-                        ItemHolder.getInstance().merge(serverItems);
-                    } else {
-                        // Write data to local
-                        List<Item> serverLocal = new ArrayList<>();
-                        for (Item _serverItem : serverItems) {
-                            boolean exits = false;
-                            for (Item _localItem : localItems) {
-                                if (_serverItem.getId() == _localItem.getId()) {
-                                    exits = true;
-                                }
-                            }
-                            // If the server Item does not exist locally add it
-                            if (!exits) {
-                                serverLocal.add(_serverItem);
+                if (localItems.isEmpty()) {
+                    ItemHolder.getInstance().merge(serverItems);
+                } else {
+                    // Write data to local
+                    List<Item> serverLocal = new ArrayList<>();
+                    for (Item _serverItem : serverItems) {
+                        boolean exits = false;
+                        for (Item _localItem : localItems) {
+                            if (_serverItem.getId() == _localItem.getId()) {
+                                exits = true;
                             }
                         }
-                        ItemHolder.getInstance().merge(serverLocal);
-
-                        //Write data to server if its a new server for example
-                        List<Item> localServer = new ArrayList<>();
-                        for (Item _localItem : serverItems) {
-                            boolean exits = false;
-                            for (Item _serverItem : localItems) {
-                                if (_serverItem.getId() == _localItem.getId()) {
-                                    exits = true;
-                                }
-                            }
-                            // If the server Item does no
-                            if (!exits) {
-                                localServer.add(_localItem);
-                            }
-                        }
-                        // Write all files which are not on the server but in the list
-                        // to the server
-                        for (Item _item : localServer) {
-                            writeToServer(_item);
+                        // If the server Item does not exist locally add it
+                        if (!exits) {
+                            serverLocal.add(_serverItem);
                         }
                     }
-                    Toasty.success(context, "Synchronised", Toast.LENGTH_SHORT).show();
+                    ItemHolder.getInstance().merge(serverLocal);
+
+                    //Write data to server if its a new server for example
+                    for (Item _localItem : localItems) {
+                        boolean exits = false;
+                        for (Item _serverItem : serverItems) {
+                            if (_localItem.getId() == _serverItem.getId()) {
+                                exits = true;
+                            }
+                        }
+                        // If the server Item does no
+                        if (!exits) {
+                            writeToServer(_localItem);
+                        }
+                    }
+
                 }
+                Toasty.success(context, "Synchronised", Toast.LENGTH_SHORT).show();
             } else {
                 // Could not sync
                 Log.d(TAG, "Could not synchronise");
