@@ -25,11 +25,11 @@ import es.dmoral.toasty.Toasty;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.GET_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.ITEMS_FILE;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.NOT_ON_SERVER_FILE;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.POST_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.SETTINGS;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.GET_URL_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.ITEMS_FILE;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.NOT_ON_SERVER_FILE;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
 /**
  * Created by michi on 19.06.17.
@@ -135,7 +135,7 @@ public class FileIO {
                 e.printStackTrace();
             }
         }
-        return (ArrayList<Item>) new Gson().fromJson(jsonString, GlobalShit.ITEM_LIST_TYPE_TOKEN);
+        return (ArrayList<Item>) new Gson().fromJson(jsonString, Constants.ITEM_LIST_TYPE_TOKEN);
     }
 
     /**
@@ -145,7 +145,7 @@ public class FileIO {
      * @return was the write successful
      */
     public boolean writeItemFile(List<Item> items) {
-        String itemsJsonString = new Gson().toJson(items, GlobalShit.ITEM_LIST_TYPE_TOKEN);
+        String itemsJsonString = new Gson().toJson(items, Constants.ITEM_LIST_TYPE_TOKEN);
         if (isExternalStorageWritable()) {
             try {
                 deleteItemFile();           // Delete the old file
@@ -171,7 +171,6 @@ public class FileIO {
      * @param item Item to append to server
      */
     public void writeToServer(Item item) {
-        Toast.makeText(context, "Posting to: " + settings.getString(POST_URL_PREF, null), Toast.LENGTH_LONG).show();
         new AsyncPost().execute(item);
     }
 
@@ -194,7 +193,7 @@ public class FileIO {
                 e.printStackTrace();
             }
         }
-        ArrayList<Item> _items = new Gson().fromJson(jsonString, GlobalShit.ITEM_LIST_TYPE_TOKEN);
+        ArrayList<Item> _items = new Gson().fromJson(jsonString, Constants.ITEM_LIST_TYPE_TOKEN);
         if (_items != null) {
             return _items;
         } else {
@@ -209,7 +208,7 @@ public class FileIO {
      * @return Was the creation/writing of the file successful
      */
     private boolean writeTmpFile(List<Item> items) {
-        String itemsJsonString = new Gson().toJson(items, GlobalShit.ITEM_LIST_TYPE_TOKEN);
+        String itemsJsonString = new Gson().toJson(items, Constants.ITEM_LIST_TYPE_TOKEN);
         if (isExternalStorageWritable()) {
             try {
                 deleteTmpFile();
@@ -268,7 +267,7 @@ public class FileIO {
             // Start REST and parse to json
             _item = (Item) object[0];
             Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd_HH:mm").create();
-            String _itemString = gson.toJson(_item, GlobalShit.ITEM_TYPE_TOKEN);
+            String _itemString = gson.toJson(_item, Constants.ITEM_TYPE_TOKEN);
             return ServerIO.saveToServer(settings.getString(POST_URL_PREF, null), _itemString);
         }
 
@@ -290,7 +289,7 @@ public class FileIO {
             } else {
                 // Sync has failed
                 Log.d(TAG, "Could not send to server, Item will be added to the queue");
-
+                Toasty.error(context, "Could not synchronise", Toast.LENGTH_SHORT).show();
                 // Add the not synced item to the list and save it
                 // Check if the item is already in the queue
                 if (!queue.contains(_item)) {
@@ -322,7 +321,7 @@ public class FileIO {
                 Log.d(TAG, "Synced");
                 // Compare with local files and maybe add them
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd_HH:mm").create();
-                List<Item> serverItems = (ArrayList<Item>) gson.fromJson(result, GlobalShit.ITEM_LIST_TYPE_TOKEN);
+                List<Item> serverItems = (ArrayList<Item>) gson.fromJson(result, Constants.ITEM_LIST_TYPE_TOKEN);
                 List<Item> localItems = ItemHolder.getInstance().getItems();
 
                 if (!serverItems.isEmpty()) {

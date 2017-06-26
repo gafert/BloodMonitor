@@ -4,36 +4,41 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.util.Log;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.INDEX_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.SETTINGS;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.INDEX_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
-public class Index {
-    private static final String TAG = "Index";
-    private static Index ourInstance = null;
+public class IdentificationGenerator {
+    private static final String TAG = "IdentificationGenerator";
+    private static IdentificationGenerator ourInstance = null;
     private Context context;
     private SharedPreferences settings;
     private int index;
 
-    private Index(Context context) {
+    private IdentificationGenerator(Context context) {
         this.context = context;
         this.settings = context.getSharedPreferences(SETTINGS, 0);
         this.index = settings.getInt(INDEX_PREF, 0);
     }
 
-    public static Index getInstance() {
+    public static IdentificationGenerator getInstance() {
         if (ourInstance == null) {
             Log.e(TAG, "getInstance: Context not set");
         }
         return ourInstance;
     }
 
-    public static Index getInstance(Context context) {
+    public static IdentificationGenerator getInstance(Context context) {
         if (ourInstance == null) {
-            ourInstance = new Index(context);
+            ourInstance = new IdentificationGenerator(context);
         }
         return ourInstance;
     }
 
+    /**
+     * Generate a new unique ID
+     *
+     * @return Returns the new ID
+     */
     public int getNextID() {
         index = index + 1;
 
@@ -41,7 +46,7 @@ public class Index {
         editor.putInt(INDEX_PREF, index);
         editor.apply();
 
-        Log.d(TAG, "getNextID: Index=" + index);
+        Log.d(TAG, "getNextID: IdentificationGenerator=" + index);
         return index;
     }
 }

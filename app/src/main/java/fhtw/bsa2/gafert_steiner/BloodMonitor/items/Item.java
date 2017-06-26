@@ -1,39 +1,54 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
+import android.location.Location;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
+import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_NORMAL;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_NORMAL;
 
 
 public class Item {
     private int id;
-    private Date timestamp = new Date();
-    private Integer mood = FEELING_NORMAL;
+    private Date timestamp;
+    private Integer mood;
     private String reason;
+    private Location location;
 
-    // Parser for manual add
-    public Item(@NonNull Date timestamp, @NonNull Integer mood, @Nullable String reason) {
+    /**
+     * Creates an Item with a unique ID
+     *
+     * @param location  Where the recording was taken
+     * @param timestamp The date of the entry (as it is a diary app)
+     * @param mood      How the person is feeling
+     * @param reason    Why the person is feeling that way
+     */
+    public Item(Location location, @NonNull Date timestamp, Integer mood, String reason) {
+        this.id = IdentificationGenerator.getInstance().getNextID();
         this.timestamp = timestamp;
         this.mood = mood;
         this.reason = reason;
-        this.id = Index.getInstance().getNextID();
-        if (reason == null) {
-            this.reason = "";
-        }
+        this.location = location;
     }
 
-    public Item(@NonNull Integer id, @NonNull Date timestamp, @NonNull Integer mood, @Nullable String reason) {
-        this.timestamp = timestamp;
-        this.mood = mood;
-        this.reason = reason;
-        this.id = id;
-        if (reason == null) {
-            this.reason = "";
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getLocationString() {
+        if (location == null) {
+            return "No location data";
         }
+        String latitude = String.valueOf(location.getLatitude());
+        String longitude = String.valueOf(location.getLongitude());
+        String location = "Latitude: " + latitude + "\nLongitude: " + longitude;
+        return location;
     }
 
     public int getId() {
@@ -48,20 +63,28 @@ public class Item {
         return timestamp;
     }
 
-    public void setTimestamp(Date timestamp) {
+    public void setTimestamp(@NonNull Date timestamp) {
         this.timestamp = timestamp;
     }
 
-    public String getDateString() {
-        SimpleDateFormat sdf = new SimpleDateFormat("dd. MMM YYYY");
-        return sdf.format(timestamp);
+    public String getTimestampString() {
+        if (timestamp == null) {
+            Log.e("MainActivity", "Item with ID=" + getId() + " does not have a timestamp");
+            return "NO DATE!";
+        } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd. MMM YYYY");
+            return sdf.format(timestamp);
+        }
     }
 
     public Integer getMood() {
+        if (mood == null) {
+            mood = FEELING_NORMAL;
+        }
         return mood;
     }
 
-    public void setMood(@NonNull Integer mood) {
+    public void setMood(Integer mood) {
         this.mood = mood;
     }
 

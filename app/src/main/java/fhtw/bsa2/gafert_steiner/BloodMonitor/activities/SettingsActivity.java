@@ -7,13 +7,13 @@ import android.widget.EditText;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.GET_DIRECTORY_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.GET_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.IP_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.PORT_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.POST_DIRECTORY_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.POST_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.SETTINGS;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.GET_DIRECTORY_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.GET_URL_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.IP_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.PORT_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_DIRECTORY_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
 public class SettingsActivity extends AppCompatActivity {
     private static String TAG = "SettingsFragment";

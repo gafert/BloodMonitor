@@ -36,22 +36,29 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.ChartMarker;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.DateFormatter;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Index;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.items.IdentificationGenerator;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemArrayAdapter;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.RecyclerViewMargin;
 import info.hoang8f.widget.FButton;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_VERY_HAPPY;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_VERY_SAD;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_HAPPY;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
 
 public class MainActivity extends AppCompatActivity {
 
     private static final Comparator<Item> DATE_COMPARATOR = new Comparator<Item>() {
         @Override
         public int compare(Item a, Item b) {
-            return b.getTimestamp().compareTo(a.getTimestamp());
+            try {
+                return b.getTimestamp().compareTo(a.getTimestamp());
+            } catch (NullPointerException e) {
+                if (!ItemHolder.getInstance().getItems().isEmpty()) {
+                    //e.printStackTrace();
+                }
+            }
+            return 0;
         }
     };
 
@@ -75,8 +82,9 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup Singletons
         FileIO.getInstance(getApplicationContext());
-        Index.getInstance(getApplicationContext());
+        IdentificationGenerator.getInstance(getApplicationContext());
         ItemHolder.getInstance(getApplicationContext());
+        FileIO.getInstance().sync();
 
         // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);

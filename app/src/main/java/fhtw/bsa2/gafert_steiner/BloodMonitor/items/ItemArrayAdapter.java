@@ -15,38 +15,37 @@ import java.util.List;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_HAPPY;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_NORMAL;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_SAD;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_VERY_HAPPY;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit.FEELING_VERY_SAD;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_HAPPY;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_NORMAL;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_SAD;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_HAPPY;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
 
 public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.ViewHolder> {
 
     private final Comparator<Item> comparator;
-    //All methods in this adapter are required for a bare minimum recyclerview adapter
     private int listItemLayout;
     private Context context;
-    private ItemArrayAdapter mAdapter;
+    private ItemArrayAdapter adapter;
     private final SortedList<Item> mSortedList = new SortedList<>(Item.class, new SortedList.Callback<Item>() {
         @Override
         public void onInserted(int position, int count) {
-            mAdapter.notifyItemRangeInserted(position, count);
+            adapter.notifyItemRangeInserted(position, count);
         }
 
         @Override
         public void onRemoved(int position, int count) {
-            mAdapter.notifyItemRangeRemoved(position, count);
+            adapter.notifyItemRangeRemoved(position, count);
         }
 
         @Override
         public void onMoved(int fromPosition, int toPosition) {
-            mAdapter.notifyItemMoved(fromPosition, toPosition);
+            adapter.notifyItemMoved(fromPosition, toPosition);
         }
 
         @Override
         public void onChanged(int position, int count) {
-            mAdapter.notifyItemRangeChanged(position, count);
+            adapter.notifyItemRangeChanged(position, count);
         }
 
         @Override
@@ -65,27 +64,25 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         }
     });
 
-    // Constructor of the class
     public ItemArrayAdapter(Context context, int layoutId, Comparator<Item> comparator) {
-        listItemLayout = layoutId;
+        this.listItemLayout = layoutId;
         this.comparator = comparator;
         this.context = context;
-        mAdapter = this;
+        this.adapter = this;
     }
 
-    // specify the row layout file and click for each row
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(listItemLayout, parent, false);
-        ViewHolder myViewHolder = new ViewHolder(view);
-        return myViewHolder;
+        return new ViewHolder(view);
     }
 
     @Override
     public void onBindViewHolder(final ViewHolder holder, final int listPosition) {
         Item _item = mSortedList.get(listPosition);
-        holder.dateView.setText(_item.getDateString());
+        holder.dateView.setText(_item.getTimestampString());
         holder.idView.setText(String.valueOf(_item.getId()));
+        holder.locationView.setText(_item.getLocationString());
 
         if (mSortedList.get(listPosition).getReason() == null ||
                 mSortedList.get(listPosition).getReason().equals("")) {
@@ -120,7 +117,6 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         }
     }
 
-    // get the size of the list
     @Override
     public int getItemCount() {
         return mSortedList == null ? 0 : mSortedList.size();
@@ -142,12 +138,12 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         mSortedList.add(model);
     }
 
-    public void remove(Item model) {
-        mSortedList.remove(model);
-    }
-
     public void add(List<Item> models) {
         mSortedList.addAll(models);
+    }
+
+    public void remove(Item model) {
+        mSortedList.remove(model);
     }
 
     public void remove(List<Item> models) {
@@ -158,12 +154,12 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         mSortedList.endBatchedUpdates();
     }
 
-    // Static inner class to initialize the views of rows
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public TextView dateView;
         public TextView reasonView;
         public ImageView emotionImageView;
         public TextView idView;
+        public TextView locationView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -171,6 +167,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
             reasonView = (TextView) itemView.findViewById(R.id.reasonTextView);
             emotionImageView = (ImageView) itemView.findViewById(R.id.emotionImageView);
             idView = (TextView) itemView.findViewById(R.id.idTextView);
+            locationView = (TextView) itemView.findViewById(R.id.locationTextView);
         }
 
         @Override

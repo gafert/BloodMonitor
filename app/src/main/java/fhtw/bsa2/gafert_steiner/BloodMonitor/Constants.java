@@ -11,7 +11,7 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
  * Created by michi on 19.06.17.
  */
 
-public class GlobalShit {
+public class Constants {
     public final static int FEELING_VERY_HAPPY = 20;
     public final static int FEELING_HAPPY = 10;
     public final static int FEELING_NORMAL = 0;
@@ -35,4 +35,13 @@ public class GlobalShit {
 
     public static final Type ITEM_TYPE_TOKEN = new TypeToken<Item>() {
     }.getType();
+
+    public static final int LOCATION_REQ_PERM = 99;
+
+    /**
+     * Suppress default constructor for noninstantiability
+     */
+    private Constants() {
+        throw new AssertionError();
+    }
 }

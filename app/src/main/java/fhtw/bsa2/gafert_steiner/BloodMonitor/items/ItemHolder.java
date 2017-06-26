@@ -1,6 +1,7 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
 import android.content.Context;
+import android.location.Location;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -13,8 +14,8 @@ import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 
+import fhtw.bsa2.gafert_steiner.BloodMonitor.Constants;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.GlobalShit;
 
 public class ItemHolder {
     private static final String TAG = "ItemHolder";
@@ -75,12 +76,24 @@ public class ItemHolder {
     public void setDummyItems() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyMMdd");
         try {
-            add(new Item(sdf.parse("070501"), GlobalShit.FEELING_HAPPY, "I am a dummy dateView and have no feels..."));
+            Location location = new Location("");
+            location.setLongitude(0);
+            location.setLatitude(0);
+            add(new Item(location, sdf.parse("070501"), Constants.FEELING_HAPPY, "I am a dummy dateView and have no feels..."));
         } catch (ParseException e) {
             Log.e("ItemHolder", "setDummyItems: Could not set dummy item");
         }
     }
 
+    /**
+     * Adds an Item to the list
+     * Tries to write it to a file
+     * Tries to post it to the server
+     * Calls the change listener
+     *
+     * @param newEntry The item wich shall be addded
+     * @return Was the Item added = true
+     */
     public boolean add(@NonNull Item newEntry) {
         // Replace already set item by date
         boolean duplicate = false;
@@ -99,8 +112,16 @@ public class ItemHolder {
 
             // Sort the list by timestamp
             Collections.sort(items, new Comparator<Item>() {
-                public int compare(Item o1, Item o2) {
-                    return o1.getTimestamp().compareTo(o2.getTimestamp());
+                @Override
+                public int compare(Item a, Item b) {
+                    try {
+                        return b.getTimestamp().compareTo(a.getTimestamp());
+                    } catch (NullPointerException e) {
+                        if (!ItemHolder.getInstance().getItems().isEmpty()) {
+                            //e.printStackTrace();
+                        }
+                    }
+                    return 0;
                 }
             });
 
