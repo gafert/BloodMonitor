@@ -18,13 +18,11 @@ public class ItemHolder {
     private static final String TAG = "ItemHolder";
     private static ItemHolder ourInstance = null;
     private Context context;
-    private List<Item> items;
-    private List<ItemsChangedListener> listener;
+    private List<Item> items = new ArrayList<>();
+    private List<ItemsChangedListener> listener = new ArrayList<>();
     private boolean loadedItems = false;
 
     private ItemHolder(Context context) {
-        this.items = new ArrayList<>();
-        this.listener = new ArrayList<>();
         this.context = context;
     }
 
@@ -55,10 +53,8 @@ public class ItemHolder {
     public void setItems(@NonNull List<Item> items) {
         this.items = items;
         FileIO.getInstance().writeItemFile(items);
-        if (listener != null) {
-            for (ItemsChangedListener _listener : listener)
-                _listener.onChanged();
-        }
+        for (ItemsChangedListener _listener : listener)
+            _listener.onChanged();
     }
 
     public void merge(@NonNull List<Item> _items) {
@@ -78,10 +74,8 @@ public class ItemHolder {
         });
 
         FileIO.getInstance().writeItemFile(items);
-        if (listener != null) {
-            for (ItemsChangedListener _listener : listener)
-                _listener.onChanged();
-        }
+        for (ItemsChangedListener _listener : listener)
+            _listener.onChanged();
     }
 
     /**
@@ -122,10 +116,9 @@ public class ItemHolder {
                 }
             });
 
-            if (listener != null) {
-                for (ItemsChangedListener _listener : listener)
-                    _listener.onChanged();   // Call listener
-            }
+            for (ItemsChangedListener _listener : listener)
+                _listener.onChanged();   // Call listener
+
 
             FileIO.getInstance().writeItemFile(items);
             FileIO.getInstance().writeToServer(newEntry);
@@ -137,9 +130,8 @@ public class ItemHolder {
         items.clear();
         FileIO IO = FileIO.getInstance();
         IO.deleteFiles();
-        if (listener != null)
-            for (ItemsChangedListener _listener : listener)
-                _listener.onChanged();   // Call listener
+        for (ItemsChangedListener _listener : listener)
+            _listener.onChanged();   // Call listener
     }
 
     public void setItemsChangedListener(ItemsChangedListener _listener) {

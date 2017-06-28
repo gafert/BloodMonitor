@@ -168,6 +168,9 @@ public class AddActivity extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             Location location = task.getResult();
                             String addInf = reasonTextView.getText().toString();
+
+                            // TODO: Get bloodPressure values
+
                             Item item = new Item(location, date, emotionValue, addInf);
                             if (ItemHolder.getInstance().add(item)) {
                                 // Reset Add site

@@ -16,6 +16,9 @@ public class Item {
     private Integer mood;
     private String reason;
     private Location location;
+    private int heartRate;
+    private int diastolicPressure;
+    private int systolicPressure;
 
     /**
      * Creates an Item with a unique ID
@@ -25,12 +28,48 @@ public class Item {
      * @param mood      How the person is feeling
      * @param reason    Why the person is feeling that way
      */
-    public Item(Location location, @NonNull Date timestamp, Integer mood, String reason) {
+    public Item(Location location, @NonNull Date timestamp, int mood, String reason) {
+        IdentificationGenerator.getInstance().setLastID(ItemHolder.getInstance().getItems().size());
         this.id = IdentificationGenerator.getInstance().getNextID();
         this.timestamp = timestamp;
         this.mood = mood;
         this.reason = reason;
         this.location = location;
+        this.diastolicPressure = diastolicPressure;
+        this.systolicPressure = systolicPressure;
+        this.heartRate = heartRate;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(@NonNull Integer id) {
+        this.id = id;
+    }
+
+    public int getHeartRate() {
+        return heartRate;
+    }
+
+    public void setHeartRate(int heartRate) {
+        this.heartRate = heartRate;
+    }
+
+    public int getDiastolicPressure() {
+        return diastolicPressure;
+    }
+
+    public void setDiastolicPressure(int diastolicPressure) {
+        this.diastolicPressure = diastolicPressure;
+    }
+
+    public int getSystolicPressure() {
+        return systolicPressure;
+    }
+
+    public void setSystolicPressure(int systolicPressure) {
+        this.systolicPressure = systolicPressure;
     }
 
     public Location getLocation() {
@@ -51,14 +90,6 @@ public class Item {
         return location;
     }
 
-    public int getId() {
-        return id;
-    }
-
-    public void setId(@NonNull Integer id) {
-        this.id = id;
-    }
-
     public Date getTimestamp() {
         return timestamp;
     }
@@ -72,7 +103,7 @@ public class Item {
             Log.e("MainActivity", "Item with ID=" + getId() + " does not have a timestamp");
             return "NO DATE!";
         } else {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd. MMM YYYY");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd. MMM yyyy");
             return sdf.format(timestamp);
         }
     }

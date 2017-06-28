@@ -38,6 +38,11 @@ public class Constants {
 
     public static final int LOCATION_REQ_PERM = 99;
 
+    public static final String CHART_EMOTIONS = "emotions";
+    public static final String CHART_HEART_RATE = "heartRate";
+    public static final String CHART_DIASTOLIC = "diastolic";
+    public static final String CHART_SYSTOLIC = "systolic";
+
     /**
      * Suppress default constructor for noninstantiability
      */

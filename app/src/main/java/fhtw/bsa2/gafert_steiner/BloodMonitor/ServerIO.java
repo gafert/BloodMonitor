@@ -82,7 +82,7 @@ public class ServerIO {
             con.disconnect();
 
         } catch (Exception e) {
-            Log.e("ServerIO", e.getMessage());
+            e.printStackTrace();
         }
 
         return result;

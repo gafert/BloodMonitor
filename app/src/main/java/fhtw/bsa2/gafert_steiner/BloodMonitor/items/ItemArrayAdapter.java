@@ -1,6 +1,10 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
 import android.content.Context;
+import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
+import android.net.Uri;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,8 +14,10 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import java.io.IOException;
 import java.util.Comparator;
 import java.util.List;
+import java.util.Locale;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 
@@ -82,8 +88,48 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         Item _item = mSortedList.get(listPosition);
         holder.dateView.setText(_item.getTimestampString());
         holder.idView.setText(String.valueOf(_item.getId()));
-        holder.locationView.setText(_item.getLocationString());
+        holder.heartRateView.setText(String.valueOf(_item.getHeartRate()));
+        holder.diastolicView.setText(String.valueOf(_item.getDiastolicPressure()));
+        holder.systolicView.setText(String.valueOf(_item.getSystolicPressure()));
 
+        // Set location
+        // Get address and other stuff and display it
+        String _locationString = "No location available";
+        if (_item.getLocation() != null) {
+            try {
+                final Double latitude = _item.getLocation().getLatitude();
+                final Double longitude = _item.getLocation().getLongitude();
+
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(context, Locale.getDefault());
+
+                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+
+                _locationString = city + " " + postalCode + ", " + address;
+
+                holder.locationView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Uri uri = Uri.parse("geo:<" + latitude + ">,<" + longitude + ">?q=<" + latitude + ">,<" + longitude + ">(Blood Monitor Entry)");
+                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                        context.startActivity(intent);
+                    }
+                });
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+        holder.locationView.setText(_locationString);
+
+        // Set reason
         if (mSortedList.get(listPosition).getReason() == null ||
                 mSortedList.get(listPosition).getReason().equals("")) {
             holder.reasonView.setText("...");
@@ -91,6 +137,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
             holder.reasonView.setText(mSortedList.get(listPosition).getReason());
         }
 
+        // Set emotion Image
         if (mSortedList.get(listPosition).getMood() != null) {
             switch (mSortedList.get(listPosition).getMood()) {
                 case FEELING_VERY_HAPPY:
@@ -160,6 +207,9 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         public ImageView emotionImageView;
         public TextView idView;
         public TextView locationView;
+        public TextView heartRateView;
+        public TextView systolicView;
+        public TextView diastolicView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -168,6 +218,10 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
             emotionImageView = (ImageView) itemView.findViewById(R.id.emotionImageView);
             idView = (TextView) itemView.findViewById(R.id.idTextView);
             locationView = (TextView) itemView.findViewById(R.id.locationTextView);
+            heartRateView = (TextView) itemView.findViewById(R.id.heartRateTextView);
+            diastolicView = (TextView) itemView.findViewById(R.id.diastolicTextView);
+            systolicView = (TextView) itemView.findViewById(R.id.systolicTextView);
+
         }
 
         @Override

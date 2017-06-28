@@ -17,4 +17,9 @@
         android:id="@+id/menu_sync"
         android:title="Synchronise"
         app:showAsAction="never" />
+
+    <item
+        android:id="@+id/menu_party"
+        android:title="Party Hard"
+        app:showAsAction="never" />
 </menu>

@@ -20,4 +20,8 @@
     <color name="searchBar">#111115</color>
     <color name="graph">#44000000</color>
 
+    <color name="blue">#4ea0ff</color>
+    <color name="green">#44ff70</color>
+    <color name="red">#fd6085</color>
+
 </resources>

@@ -49,4 +49,8 @@ public class IdentificationGenerator {
         Log.d(TAG, "getNextID: IdentificationGenerator=" + index);
         return index;
     }
+
+    public void setLastID(int id) {
+        index = id;
+    }
 }

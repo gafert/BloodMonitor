@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:layout_marginBottom="10dp"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="10dp"
+            android:layout_marginRight="20dp"
             android:layout_marginTop="10dp"
             android:orientation="horizontal">
 
@@ -30,7 +30,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="10dp"
+                android:layout_marginLeft="10dp"
                 android:orientation="vertical">
 
                 <LinearLayout
@@ -41,8 +41,6 @@
                         android:id="@+id/dateTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:text="Monday 8. July 2017"
                         android:textColor="@color/grey" />
 
@@ -50,8 +48,6 @@
                         android:id="@+id/idTextView"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
                         android:gravity="right"
                         android:text="421"
                         android:textAllCaps="false"
@@ -67,18 +63,50 @@
                         android:id="@+id/locationTextView"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="10dp"
-                        android:layout_marginRight="10dp"
+                        android:layout_marginTop="5dp"
+                        android:background="@color/roundedRectGradient2"
+                        android:padding="5dp"
                         android:text="Latitude: 34.3444\nLongitude: 16.3838"
                         android:textColor="@color/grey" />
                 </LinearLayout>
+
+                <TableLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp">
+
+                    <TableRow>
+
+                        <TextView android:text="Heart Rate: " />
+
+                        <TextView
+                            android:id="@+id/heartRateTextView"
+                            android:text="80" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView android:text="Systolic Pressure [mmHG]:" />
+
+                        <TextView
+                            android:id="@+id/systolicTextView"
+                            android:text="80" />
+                    </TableRow>
+
+                    <TableRow>
+
+                        <TextView android:text="Diastolic Pressure [mmHG]:   " />
+
+                        <TextView
+                            android:id="@+id/diastolicTextView"
+                            android:text="80" />
+                    </TableRow>
+                </TableLayout>
 
                 <TextView
                     android:id="@+id/reasonTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="10dp"
-                    android:layout_marginRight="10dp"
                     android:layout_marginTop="5dp"
                     android:text="No Reason"
                     android:visibility="visible" />
