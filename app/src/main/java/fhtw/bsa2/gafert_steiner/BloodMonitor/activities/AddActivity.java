@@ -34,6 +34,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 
+import es.dmoral.toasty.Toasty;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
@@ -193,6 +194,7 @@ public class AddActivity extends AppCompatActivity {
                                 }, 1000);
                             }
                         } else {
+                            Toasty.error(AddActivity.this, "Could not get location. Try again!", Toast.LENGTH_LONG).show();
                             Log.w("AddActivity", "getLastLocation: exception", task.getException());
                         }
                     }

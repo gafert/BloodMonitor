@@ -18,7 +18,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+import android.widget.LinearLayout;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.XAxis;
@@ -26,17 +26,13 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
-import com.github.mikephil.charting.highlight.Highlight;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
-import com.github.mikephil.charting.listener.OnChartValueSelectedListener;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.ChartMarker;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.DateFormatter;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.IdentificationGenerator;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
@@ -49,24 +45,12 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_DIASTOLIC;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_EMOTIONS;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_HEART_RATE;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_SYSTOLIC;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.DATE_COMPARATOR;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_HAPPY;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.searchFilter;
 
 public class MainActivity extends AppCompatActivity {
-
-    private static final Comparator<Item> DATE_COMPARATOR = new Comparator<Item>() {
-        @Override
-        public int compare(Item a, Item b) {
-            try {
-                return b.getTimestamp().compareTo(a.getTimestamp());
-            } catch (NullPointerException e) {
-                if (!ItemHolder.getInstance().getItems().isEmpty()) {
-                    //e.printStackTrace();
-                }
-            }
-            return 0;
-        }
-    };
     // Party Mode
     Handler h = new Handler();
     int delay = 100;
@@ -74,20 +58,11 @@ public class MainActivity extends AppCompatActivity {
     boolean partyActive = false;
     int partyCounter = 0;
     MediaPlayer mediaPlayer;
-    private Menu menu;
 
-    private static List<Item> filter(List<Item> models, String query) {
-        final String lowerCaseQuery = query.toLowerCase();
-
-        final List<Item> filteredModelList = new ArrayList<>();
-        for (Item model : models) {
-            final String text = model.getReason().toLowerCase();
-            if (text.contains(lowerCaseQuery)) {
-                filteredModelList.add(model);
-            }
-        }
-        return filteredModelList;
-    }
+    AppBarLayout appBar;
+    Toolbar toolbar;
+    Menu menu;
+    LinearLayout emotionImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,10 +76,11 @@ public class MainActivity extends AppCompatActivity {
         FileIO.getInstance().sync(true);
 
         // Setup Toolbar
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        final AppBarLayout appBar = (AppBarLayout) findViewById(R.id.appbar);
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        appBar = (AppBarLayout) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
-        toolbar.setTitle("Chart");
+
+        emotionImages = (LinearLayout) findViewById(R.id.emotionImages);
 
         final RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
         final ItemArrayAdapter itemArrayAdapter = new ItemArrayAdapter(this, R.layout.example_recycler_view_element, DATE_COMPARATOR);
@@ -178,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                final List<Item> filteredModelList = filter(ItemHolder.getInstance().getItems(), s.toString());
+                final List<Item> filteredModelList = searchFilter(ItemHolder.getInstance().getItems(), s.toString());
                 recyclerView.scrollToPosition(0);
                 itemArrayAdapter.replaceAll(filteredModelList);
             }
@@ -211,45 +187,7 @@ public class MainActivity extends AppCompatActivity {
                 FileIO.getInstance().sync(true);
                 break;
             case R.id.menu_party:
-                MenuItem menuParty = menu.findItem(R.id.menu_party);
-                if (!partyActive) {
-                    menuParty.setTitle("Turn off party Mode");
-                    mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.party);
-                    mediaPlayer.start();
-                    h.postDelayed(new Runnable() {
-                        public void run() {
-                            partyActive = true;
-                            String partyMode;
-                            switch (partyCounter) {
-                                case 0:
-                                    partyMode = CHART_DIASTOLIC;
-                                    break;
-                                case 1:
-                                    partyMode = CHART_EMOTIONS;
-                                    break;
-                                case 2:
-                                    partyMode = CHART_SYSTOLIC;
-                                    break;
-                                case 3:
-                                    partyMode = CHART_HEART_RATE;
-                                    break;
-                                default:
-                                    partyMode = CHART_SYSTOLIC;
-                                    partyCounter = -1;
-                                    break;
-                            }
-                            partyCounter++;
-                            setupGraph(ItemHolder.getInstance().getItems(), partyMode);
-                            runnable = this;
-                            h.postDelayed(runnable, delay);
-                        }
-                    }, delay);
-                } else {
-                    mediaPlayer.stop();
-                    menuParty.setTitle("Party Mode");
-                    partyActive = false;
-                    h.removeCallbacks(runnable);
-                }
+                partyMode();
                 break;
         }
         return super.onOptionsItemSelected(item);
@@ -260,6 +198,7 @@ public class MainActivity extends AppCompatActivity {
         LineChart chart = (LineChart) findViewById(R.id.chart);
         chart.clear();
 
+        // Crop the list to 20 entries
         int crop = 20;
         ArrayList<Item> data = new ArrayList<>();
         if (_data.size() > crop) {
@@ -282,58 +221,46 @@ public class MainActivity extends AppCompatActivity {
         chart.getXAxis().setTextColor(Color.WHITE);
         chart.getXAxis().setValueFormatter(new DateFormatter(data));        // Format x values to see day
         chart.getXAxis().setGranularity(1);                                 // Just whole numbers are represented
-        chart.getXAxis().setLabelRotationAngle(30);
+        chart.getXAxis().setLabelRotationAngle(45);
         chart.getXAxis().setLabelCount(10);                                 // Max labels in the chart
         chart.getXAxis().setTextSize(8);
         chart.getXAxis().setPosition(XAxis.XAxisPosition.BOTTOM);           // X Values are at the bottom of the chart
 
         // Range of X axis
+        // Most elements and least elements in the view
         chart.setVisibleXRangeMaximum(10);
         chart.setVisibleXRangeMinimum(5);
 
-        // Style Y Axis
         chart.getAxisRight().setTextColor(Color.WHITE);
         chart.getAxisLeft().setTextColor(Color.WHITE);
-
-        // Disable all Y Axis except 1
         chart.getAxisRight().setEnabled(false);
         chart.getAxisLeft().setDrawLabels(false);
-        chart.setDescription(null);                                         // Remove Description
+        chart.setDescription(null);
 
         // Chart interactive
-        chart.setDragEnabled(true);                                         // Chart is dragable
-        chart.setScaleXEnabled(true);                                       // Only scaleable on X
+        chart.setDragEnabled(true);
+        chart.setScaleXEnabled(true);
+        chart.setScaleYEnabled(false);
+
+        boolean tabletSize = getResources().getBoolean(R.bool.isTablet);
+        if (tabletSize) {
+            chart.setViewPortOffsets(0f, 5f, 0f, 75f);
+            chart.getXAxis().setYOffset(10);
+        } else {
+            chart.setViewPortOffsets(0f, 5f, 0f, 130f);
+            chart.getXAxis().setYOffset(10);
+        }
 
         // Always draw Y as high as max values + offset
         if (show.equals(CHART_EMOTIONS)) {
+            emotionImages.setVisibility(View.VISIBLE);
             chart.getAxisLeft().setAxisMaximum(FEELING_VERY_HAPPY + 5);
             chart.getAxisLeft().setAxisMinimum(FEELING_VERY_SAD - 5);
-            chart.setScaleYEnabled(false);
         } else {
+            emotionImages.setVisibility(View.INVISIBLE);
             chart.getAxisLeft().resetAxisMaximum();
-            chart.getAxisLeft().setAxisMinimum(-10);
-            chart.setScaleYEnabled(true);
+            chart.getAxisLeft().setAxisMinimum(-15);
         }
-
-        // Custom marker to highlight entries
-        ChartMarker elevationMarker = new ChartMarker(this);       // Make a custom marker
-        elevationMarker.setOffset(
-                -(elevationMarker.getWidth() / 2),
-                -(elevationMarker.getHeight() / 2));                        // Center the marker layout
-        chart.setMarker(elevationMarker);                                   // Set the new marker to the chart
-        chart.setViewPortOffsets(0f, 20f, 0f, 80f);
-
-        // Add a marker hightight listener
-        chart.setOnChartValueSelectedListener(new OnChartValueSelectedListener() {
-            @Override
-            public void onValueSelected(Entry e, Highlight h) {
-                Toast.makeText(MainActivity.this, "Selected a value", Toast.LENGTH_SHORT).show();
-            }
-
-            @Override
-            public void onNothingSelected() {
-            }
-        });
 
         //
         //      FILL THE CHART WITH VALUES
@@ -383,7 +310,7 @@ public class MainActivity extends AppCompatActivity {
             entryDataSet.setCircleRadius(7);
             entryDataSet.setCircleHoleRadius(5);
             entryDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);    // Makes it line smooth
-            entryDataSet.setHighlightEnabled(true);                 // Allow highlighting for DataSet
+            entryDataSet.setHighlightEnabled(false);                 // Allow highlighting for DataSet
             entryDataSet.setDrawHighlightIndicators(false);         // Draw point on which someone clicked
             entryDataSet.setLineWidth(2f);
 
@@ -397,6 +324,7 @@ public class MainActivity extends AppCompatActivity {
                     lineData.setValueTextColor(colors[0]);
                     entryDataSet.setColor(colors[0]);
                     entryDataSet.setCircleColor(colors[0]);
+
                     break;
                 case CHART_DIASTOLIC:
                     lineData.setDrawValues(true);
@@ -425,6 +353,48 @@ public class MainActivity extends AppCompatActivity {
         }
 
         chart.invalidate(); // Draw chart
+    }
+
+    private void partyMode() {
+        MenuItem menuParty = menu.findItem(R.id.menu_party);
+        if (!partyActive) {
+            menuParty.setTitle("Turn off Party Mode");
+            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.party);
+            mediaPlayer.start();
+            h.postDelayed(new Runnable() {
+                public void run() {
+                    partyActive = true;
+                    String partyMode;
+                    switch (partyCounter) {
+                        case 0:
+                            partyMode = CHART_DIASTOLIC;
+                            break;
+                        case 1:
+                            partyMode = CHART_EMOTIONS;
+                            break;
+                        case 2:
+                            partyMode = CHART_SYSTOLIC;
+                            break;
+                        case 3:
+                            partyMode = CHART_HEART_RATE;
+                            break;
+                        default:
+                            partyMode = CHART_SYSTOLIC;
+                            partyCounter = -1;
+                            break;
+                    }
+                    partyCounter++;
+                    setupGraph(ItemHolder.getInstance().getItems(), partyMode);
+                    runnable = this;
+                    h.postDelayed(runnable, delay);
+                }
+            }, delay);
+        } else {
+            mediaPlayer.stop();
+            menuParty.setTitle("Party Mode");
+            partyActive = false;
+            h.removeCallbacks(runnable);
+        }
     }
 
 }

@@ -80,16 +80,6 @@ public class Item {
         this.location = location;
     }
 
-    public String getLocationString() {
-        if (location == null) {
-            return "No location data";
-        }
-        String latitude = String.valueOf(location.getLatitude());
-        String longitude = String.valueOf(location.getLongitude());
-        String location = "Latitude: " + latitude + "\nLongitude: " + longitude;
-        return location;
-    }
-
     public Date getTimestamp() {
         return timestamp;
     }

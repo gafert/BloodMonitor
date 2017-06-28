@@ -31,17 +31,10 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.ITEMS_FILE;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
-/**
- * Created by michi on 19.06.17.
- */
-
 public class FileIO {
     private static final String TAG = "FileIO";
-
     private static FileIO ourInstance = null;
-
     private static File itemsFile;      // All items file
-
     private Context context;
     private SharedPreferences settings;
 

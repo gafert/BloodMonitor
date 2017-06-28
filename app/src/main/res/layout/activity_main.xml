@@ -41,17 +41,78 @@
                 </FrameLayout>
             </android.support.v7.widget.Toolbar>
 
-            <com.github.mikephil.charting.charts.LineChart
-                android:id="@+id/chart"
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="250dp"
-                android:layout_marginLeft="-15dp"
-                android:layout_marginRight="-15dp"
                 android:layout_marginTop="50dp"
                 android:minHeight="?attr/actionBarSize"
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"
-                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed" />
+                app:layout_scrollFlags="scroll|enterAlways|enterAlwaysCollapsed">
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/chart"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="-15dp"
+                    android:layout_marginRight="-15dp" />
+
+                <LinearLayout
+                    android:id="@+id/emotionImages"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="10dp"
+                    android:layout_marginTop="6dp"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:srcCompat="@drawable/heart_eyes_emoji" />
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:srcCompat="@drawable/slightly_smiling_face_emoji" />
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:srcCompat="@drawable/confused_face_emoji" />
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:srcCompat="@drawable/sad_face_emoji" />
+
+                    <ImageView
+                        android:layout_width="23dp"
+                        android:layout_height="30dp"
+                        android:layout_marginBottom="10dp"
+                        android:gravity="center"
+                        android:textAlignment="center"
+                        android:textSize="24sp"
+                        app:srcCompat="@drawable/loudly_crying_face_emoji" />
+                </LinearLayout>
+
+            </FrameLayout>
+
 
             <info.hoang8f.widget.FButton
                 android:id="@+id/addButton"

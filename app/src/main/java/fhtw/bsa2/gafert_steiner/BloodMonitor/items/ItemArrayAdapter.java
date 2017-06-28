@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.location.Address;
 import android.location.Geocoder;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.support.v7.util.SortedList;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -94,40 +95,23 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
 
         // Set location
         // Get address and other stuff and display it
-        String _locationString = "No location available";
+        // If the address is already in the item
         if (_item.getLocation() != null) {
-            try {
-                final Double latitude = _item.getLocation().getLatitude();
-                final Double longitude = _item.getLocation().getLongitude();
+            final Double latitude = _item.getLocation().getLatitude();
+            final Double longitude = _item.getLocation().getLongitude();
 
-                Geocoder geocoder;
-                List<Address> addresses;
-                geocoder = new Geocoder(context, Locale.getDefault());
+            // Geocoder makes recyclerView lag on initialisation of the item -> make in async task
+            new AsyncGetAddress().execute(latitude, longitude, holder.locationView);
 
-                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-
-                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
-                String city = addresses.get(0).getLocality();
-                String state = addresses.get(0).getAdminArea();
-                String country = addresses.get(0).getCountryName();
-                String postalCode = addresses.get(0).getPostalCode();
-                String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
-
-                _locationString = city + " " + postalCode + ", " + address;
-
-                holder.locationView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Uri uri = Uri.parse("geo:<" + latitude + ">,<" + longitude + ">?q=<" + latitude + ">,<" + longitude + ">(Blood Monitor Entry)");
-                        Intent intent = new Intent(Intent.ACTION_VIEW, uri);
-                        context.startActivity(intent);
-                    }
-                });
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            holder.locationView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Uri uri = Uri.parse("geo:<" + latitude + ">,<" + longitude + ">?q=<" + latitude + ">,<" + longitude + ">(Blood Monitor Entry)");
+                    Intent intent = new Intent(Intent.ACTION_VIEW, uri);
+                    context.startActivity(intent);
+                }
+            });
         }
-        holder.locationView.setText(_locationString);
 
         // Set reason
         if (mSortedList.get(listPosition).getReason() == null ||
@@ -221,12 +205,47 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
             heartRateView = (TextView) itemView.findViewById(R.id.heartRateTextView);
             diastolicView = (TextView) itemView.findViewById(R.id.diastolicTextView);
             systolicView = (TextView) itemView.findViewById(R.id.systolicTextView);
-
         }
 
         @Override
         public void onClick(View view) {
             Log.d("onclick", "onClick " + getLayoutPosition() + " " + dateView.getText());
+        }
+    }
+
+    private class AsyncGetAddress extends AsyncTask<Object, String, String> {
+        private TextView locationView;
+
+        @Override
+        protected String doInBackground(Object... params) {
+            Double latitude = (Double) params[0];
+            Double longitude = (Double) params[1];
+            locationView = (TextView) params[2];
+
+            try {
+                Geocoder geocoder;
+                List<Address> addresses;
+                geocoder = new Geocoder(context, Locale.getDefault());
+
+                addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String city = addresses.get(0).getLocality();
+                String state = addresses.get(0).getAdminArea();
+                String country = addresses.get(0).getCountryName();
+                String postalCode = addresses.get(0).getPostalCode();
+                String knownName = addresses.get(0).getFeatureName(); // Only if available else return NULL
+                return city + " " + postalCode + ", " + address;
+
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            return "No Location Data";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            locationView.setText(s);
         }
     }
 }
