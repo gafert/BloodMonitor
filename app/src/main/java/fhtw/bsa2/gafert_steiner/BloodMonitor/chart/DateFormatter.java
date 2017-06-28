@@ -9,6 +9,10 @@ import java.util.Date;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 
+/**
+ * Used by {@link com.github.mikephil.charting.charts.LineChart} to style the x Axis Values
+ * to the corresponding Dates of the {@link Item}
+ */
 public class DateFormatter implements IAxisValueFormatter {
 
     private ArrayList<Item> items;

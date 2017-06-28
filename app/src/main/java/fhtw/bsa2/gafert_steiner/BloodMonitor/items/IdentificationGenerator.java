@@ -7,6 +7,14 @@ import android.util.Log;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.INDEX_PREF;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
+/**
+ * This class generates an unique ID
+ * The function {@link #getNextID()} gives back an ID which is saved in
+ * the {@link SharedPreferences} and +1s it and saves it again
+ * <p>
+ * The function {@link #setLastID(int)} can be used to set the ID in the {@link SharedPreferences}
+ * This may be used if the ID was changed somewhere else and not directly with this instance
+ */
 public class IdentificationGenerator {
     private static final String TAG = "IdentificationGenerator";
     private static IdentificationGenerator ourInstance = null;
@@ -50,6 +58,11 @@ public class IdentificationGenerator {
         return index;
     }
 
+    /**
+     * Sets an ID which shall be incremented if it was somewhere else changed
+     *
+     * @param id The ID which shall be saved in the {@link SharedPreferences}
+     */
     public void setLastID(int id) {
         index = id;
     }

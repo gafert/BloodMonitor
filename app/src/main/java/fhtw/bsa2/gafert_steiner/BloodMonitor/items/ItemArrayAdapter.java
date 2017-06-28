@@ -28,6 +28,9 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_SAD;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_HAPPY;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
 
+/**
+ * Used to display the Items in a {@link RecyclerView}
+ */
 public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.ViewHolder> {
 
     private final Comparator<Item> comparator;
@@ -71,6 +74,12 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         }
     });
 
+    /**
+     * @param context    Application context needed to get the address by the location with {@link Geocoder}
+     * @param layoutId   The Layout Resource
+     * @param comparator The Comparator to sort the list (e.g Alphabetically)
+     *                   We only use DATE_COMPARATOR
+     */
     public ItemArrayAdapter(Context context, int layoutId, Comparator<Item> comparator) {
         this.listItemLayout = layoutId;
         this.comparator = comparator;
@@ -153,6 +162,11 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         return mSortedList == null ? 0 : mSortedList.size();
     }
 
+    /**
+     * Replaces all elements of the recyclerView with a new list
+     *
+     * @param models The Item list of the new Items
+     */
     public void replaceAll(List<Item> models) {
         mSortedList.beginBatchedUpdates();
         for (int i = mSortedList.size() - 1; i >= 0; i--) {
@@ -165,18 +179,34 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         mSortedList.endBatchedUpdates();
     }
 
+    /**
+     * Adds a single Element to the RecyclerView
+     * @param model The Item to be added
+     */
     public void add(Item model) {
         mSortedList.add(model);
     }
 
+    /**
+     * Addes a List of Item to the RecyclerView
+     * @param models The items to be added
+     */
     public void add(List<Item> models) {
         mSortedList.addAll(models);
     }
 
+    /**
+     * Removes a specific Item
+     * @param model Item to be removed
+     */
     public void remove(Item model) {
         mSortedList.remove(model);
     }
 
+    /**
+     * Removes a List of Items
+     * @param models Items to be removed
+     */
     public void remove(List<Item> models) {
         mSortedList.beginBatchedUpdates();
         for (Item model : models) {
@@ -186,14 +216,14 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
     }
 
     static class ViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        public TextView dateView;
-        public TextView reasonView;
-        public ImageView emotionImageView;
-        public TextView idView;
-        public TextView locationView;
-        public TextView heartRateView;
-        public TextView systolicView;
-        public TextView diastolicView;
+        TextView dateView;
+        TextView reasonView;
+        ImageView emotionImageView;
+        TextView idView;
+        TextView locationView;
+        TextView heartRateView;
+        TextView systolicView;
+        TextView diastolicView;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -213,6 +243,11 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
         }
     }
 
+    /**
+     * Gets the address in an AsyncTask to prevent lagging of the recyclerView
+     * {@link Geocoder} requires Internet, when there is no connection the Location will be set to
+     * "No Location". If the Geocoder has Internet it looks the address up and returns it.
+     */
     private class AsyncGetAddress extends AsyncTask<Object, String, String> {
         private TextView locationView;
 

@@ -51,18 +51,17 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.searchFilter;
 
 public class MainActivity extends AppCompatActivity {
-    // Party Mode
-    Handler h = new Handler();
-    int delay = 100;
-    Runnable runnable;
-    boolean partyActive = false;
-    int partyCounter = 0;
-    MediaPlayer mediaPlayer;
+    // Party Mode vars
+    private Handler h = new Handler();
+    private int delay = 100;
+    private Runnable runnable;
+    private boolean partyActive = false;
+    private int partyCounter = 0;
+    private MediaPlayer mediaPlayer;
 
-    AppBarLayout appBar;
-    Toolbar toolbar;
-    Menu menu;
-    LinearLayout emotionImages;
+    private AppBarLayout appBar;
+    private Menu menu;
+    private LinearLayout emotionImages;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +75,7 @@ public class MainActivity extends AppCompatActivity {
         FileIO.getInstance().sync(true);
 
         // Setup Toolbar
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         appBar = (AppBarLayout) findViewById(R.id.appbar);
         setSupportActionBar(toolbar);
 
@@ -355,6 +354,10 @@ public class MainActivity extends AppCompatActivity {
         chart.invalidate(); // Draw chart
     }
 
+    /**
+     * Fun gag, switches between the different chart views and plays music
+     * Can be turned on and of with this function
+     */
     private void partyMode() {
         MenuItem menuParty = menu.findItem(R.id.menu_party);
         if (!partyActive) {

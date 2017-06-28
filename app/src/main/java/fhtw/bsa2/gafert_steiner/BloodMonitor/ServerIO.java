@@ -10,11 +10,21 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
-public class ServerIO {
+/**
+ * Contains post and get methods
+ */
+class ServerIO {
 
     private final static String TAG = "ServerIO";
 
-    public static String saveToServer(String url, String jsonString) {
+    /**
+     * Connects to the server and posts a jsonString
+     *
+     * @param url        Where the jsonString should be posted
+     * @param jsonString The jsonFile to post
+     * @return Returns true if the String was successfully send
+     */
+    static String saveToServer(String url, String jsonString) {
         Log.d(TAG, "writeToServer: Url=" + url);
         String result = null;
 
@@ -37,7 +47,7 @@ public class ServerIO {
 
             // Get reply from Server
             InputStream inputStream = con.getInputStream();
-            StringBuffer buffer = new StringBuffer();
+            StringBuilder buffer = new StringBuilder();
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String inputLine;
             while ((inputLine = reader.readLine()) != null) {
@@ -52,7 +62,13 @@ public class ServerIO {
         return result;
     }
 
-    public static String loadFromServer(String url) {
+    /**
+     * Connects to a Rest Server and gets all information in a String
+     *
+     * @param url The Server Address
+     * @return Returns the gotten String of the Rest Server
+     */
+    static String loadFromServer(String url) {
         String result = null;
 
         try {

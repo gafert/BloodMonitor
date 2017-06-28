@@ -3,119 +3,108 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:background="@drawable/rounded_rect_gradient_background"
     android:orientation="vertical">
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@drawable/rounded_rect_gradient_background"
-        android:orientation="vertical">
+        android:layout_marginBottom="10dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="10dp"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:id="@+id/emotionImageView"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:scaleType="fitCenter"
+            app:srcCompat="@drawable/confused_face_emoji" />
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_marginBottom="10dp"
+            android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:layout_marginRight="20dp"
-            android:layout_marginTop="10dp"
-            android:orientation="horizontal">
-
-            <ImageView
-                android:id="@+id/emotionImageView"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:scaleType="fitCenter"
-                app:srcCompat="@drawable/confused_face_emoji" />
+            android:orientation="vertical">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/dateTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Monday 8. July 2017"
-                        android:textColor="@color/grey" />
-
-                    <TextView
-                        android:id="@+id/idTextView"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="right"
-                        android:text="421"
-                        android:textAllCaps="false"
-                        android:textColor="@color/grey"
-                        android:textStyle="italic" />
-                </LinearLayout>
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
-
-                    <TextView
-                        android:id="@+id/locationTextView"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="5dp"
-                        android:background="@color/roundedRectGradient2"
-                        android:padding="5dp"
-                        android:text="Latitude: 34.3444\nLongitude: 16.3838"
-                        android:textColor="@color/grey" />
-                </LinearLayout>
-
-                <TableLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp">
-
-                    <TableRow>
-
-                        <TextView android:text="Heart Rate: " />
-
-                        <TextView
-                            android:id="@+id/heartRateTextView"
-                            android:text="80" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView android:text="Systolic Pressure [mmHG]:" />
-
-                        <TextView
-                            android:id="@+id/systolicTextView"
-                            android:text="80" />
-                    </TableRow>
-
-                    <TableRow>
-
-                        <TextView android:text="Diastolic Pressure [mmHG]:   " />
-
-                        <TextView
-                            android:id="@+id/diastolicTextView"
-                            android:text="80" />
-                    </TableRow>
-                </TableLayout>
+                android:layout_height="wrap_content">
 
                 <TextView
-                    android:id="@+id/reasonTextView"
-                    android:layout_width="match_parent"
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="5dp"
-                    android:text="No Reason"
-                    android:visibility="visible" />
+                    android:text="Monday 8. July 2017"
+                    android:textColor="@color/grey" />
 
+                <TextView
+                    android:id="@+id/idTextView"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="right"
+                    android:text="421"
+                    android:textAllCaps="false"
+                    android:textColor="@color/grey"
+                    android:textStyle="italic" />
             </LinearLayout>
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:id="@+id/locationTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="5dp"
+                    android:background="@color/roundedRectGradient2"
+                    android:padding="5dp"
+                    android:text="Waiting for Location"
+                    android:textColor="@color/grey" />
+            </LinearLayout>
+
+            <TableLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp">
+
+                <TableRow>
+
+                    <TextView android:text="Heart Rate: " />
+
+                    <TextView
+                        android:id="@+id/heartRateTextView"
+                        android:text="80" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView android:text="Systolic Pressure [mmHG]:" />
+
+                    <TextView
+                        android:id="@+id/systolicTextView"
+                        android:text="80" />
+                </TableRow>
+
+                <TableRow>
+
+                    <TextView android:text="Diastolic Pressure [mmHG]:   " />
+
+                    <TextView
+                        android:id="@+id/diastolicTextView"
+                        android:text="80" />
+                </TableRow>
+            </TableLayout>
+
+            <TextView
+                android:id="@+id/reasonTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="5dp"
+                android:text="No Reason"
+                android:visibility="visible" />
         </LinearLayout>
-
-
     </LinearLayout>
-
 </LinearLayout>

@@ -33,6 +33,7 @@ import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
@@ -47,6 +48,14 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_HAPPY
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.LOCATION_REQ_PERM;
 
+/**
+ * Contains all input fields to make an {@link Item}
+ * Emotion is selected manually as is the Reason
+ * Location is also got when the user clicks the add button
+ * Used to get the location is the {@link FusedLocationProviderClient}
+ * The date can be entered with a {@link DatePickerDialog}
+ * Blood Pressure Values can be entered manually or with the help of GATT and Bluetooth
+ */
 public class AddActivity extends AppCompatActivity {
 
     RadioGroup emotionPicker;                       // Sets the emotionValue
@@ -79,7 +88,7 @@ public class AddActivity extends AppCompatActivity {
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d. MMM yyyy");
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d. MMM yyyy", Locale.getDefault());
             String dateString = simpleDateFormat.format(new Date());
             date = simpleDateFormat.parse(dateString);
 
@@ -120,12 +129,12 @@ public class AddActivity extends AppCompatActivity {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
                         try {
-                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddyyyy");
+                            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMddyyyy", Locale.getDefault());
                             DecimalFormat mFormat = new DecimalFormat("00");
                             date = simpleDateFormat.parse(String.valueOf(
                                     mFormat.format(month + 1) + "" + mFormat.format(dayOfMonth) + "" + mFormat.format(year)));
 
-                            simpleDateFormat = new SimpleDateFormat("d. MMM yyyy");
+                            simpleDateFormat = new SimpleDateFormat("d. MMM yyyy", Locale.getDefault());
                             dateTextView.setText(simpleDateFormat.format(date));
                         } catch (ParseException e) {
                             Log.e("AddFragment", "onDateSet: Could not parse to date string");

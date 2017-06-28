@@ -6,6 +6,7 @@ import android.util.Log;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_NORMAL;
 
@@ -29,6 +30,7 @@ public class Item {
      * @param reason    Why the person is feeling that way
      */
     public Item(Location location, @NonNull Date timestamp, int mood, String reason) {
+        // Set the last ID to the size of all Items in the Files/List/Server
         IdentificationGenerator.getInstance().setLastID(ItemHolder.getInstance().getItems().size());
         this.id = IdentificationGenerator.getInstance().getNextID();
         this.timestamp = timestamp;
@@ -93,7 +95,7 @@ public class Item {
             Log.e("MainActivity", "Item with ID=" + getId() + " does not have a timestamp");
             return "NO DATE!";
         } else {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd. MMM yyyy");
+            SimpleDateFormat sdf = new SimpleDateFormat("dd. MMM yyyy", Locale.getDefault());
             return sdf.format(timestamp);
         }
     }

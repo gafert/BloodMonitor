@@ -31,6 +31,14 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.ITEMS_FILE;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
+/**
+ * Saves items to a File with {@link #writeItemFile(List)} and to a server with {@link AsyncPost}
+ * With the function {@link #sync(Boolean)} {@link FileIO} compares the Server files which it
+ * got from {@link AsyncGet} to the local files. If there are changes post them or add them to
+ * the local list.
+ * <p>
+ * Also reads from the local File with {@link #readItemFile()}
+ */
 public class FileIO {
     private static final String TAG = "FileIO";
     private static FileIO ourInstance = null;
@@ -78,12 +86,12 @@ public class FileIO {
         }
     }
 
-    public boolean isExternalStorageWritable() {
+    private boolean isExternalStorageWritable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state);
     }
 
-    public boolean isExternalStorageReadable() {
+    private boolean isExternalStorageReadable() {
         String state = Environment.getExternalStorageState();
         return Environment.MEDIA_MOUNTED.equals(state) ||
                 Environment.MEDIA_MOUNTED_READ_ONLY.equals(state);
@@ -237,7 +245,7 @@ public class FileIO {
                 Log.d(TAG, "Synced");
                 // Compare with local files and maybe add them
                 Gson gson = new GsonBuilder().setDateFormat("yyyy-MM-dd_HH:mm").create();
-                List<Item> serverItems = (ArrayList<Item>) gson.fromJson(result, Constants.ITEM_LIST_TYPE_TOKEN);
+                List<Item> serverItems = gson.fromJson(result, Constants.ITEM_LIST_TYPE_TOKEN);
                 List<Item> localItems = ItemHolder.getInstance().getItems();
 
                 if (localItems.isEmpty()) {

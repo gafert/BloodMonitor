@@ -15,6 +15,10 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_DIRECTORY_PRE
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
 
+/**
+ * Saves Changes to the Settings in the {@link SharedPreferences}
+ * to be accessed anywhere in the app
+ */
 public class SettingsActivity extends AppCompatActivity {
     private static String TAG = "SettingsFragment";
     private EditText ip;
@@ -26,11 +30,11 @@ public class SettingsActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_seetings);
+        setContentView(R.layout.activity_settings);
 
         // Get all texts
-        ip = (EditText) findViewById(R.id.postIP);
-        port = (EditText) findViewById(R.id.postPort);
+        ip = (EditText) findViewById(R.id.ip);
+        port = (EditText) findViewById(R.id.port);
         getDirectory = (EditText) findViewById(R.id.getDirectory);
         postDirectory = (EditText) findViewById(R.id.postDirectory);
 

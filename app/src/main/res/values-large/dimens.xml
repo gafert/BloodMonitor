@@ -1,3 +1,4 @@
 <resources>
+    <!-- If the screen is large this value will globally be set to true -->
     <bool name="isTablet">true</bool>
 </resources>
