@@ -110,8 +110,13 @@ public class AddActivity extends AppCompatActivity {
             deviceConnector = new BloodPressureDeviceConnector(this, mBluetoothAdapter);
             bleProfile = new BloodPressureProfile();
             try {
-                deviceConnector.connect(bleProfile, "5C:31:3E:00:41:95");
-                Toasty.success(AddActivity.this, "Blood Pressure Device connected", Toast.LENGTH_LONG).show();
+                boolean successful = deviceConnector.connect(bleProfile, "5C:31:3E:00:41:95");
+                if(successful){
+                    Toasty.success(AddActivity.this, "Blood Pressure Device connected", Toast.LENGTH_LONG).show();
+                }else{
+                    Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
+                }
+
             }catch (Exception e){
                 Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
             }
