@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingBottom="5dp"
-            android:paddingTop="20dp"
+            android:paddingTop="10dp"
             android:text="Server Settings"
             android:textColor="@color/colorAccent"
             android:textSize="20sp"
@@ -26,10 +26,15 @@
             android:layout_height="2dip"
             android:background="@color/colorAccent" />
 
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="DO NOT USE THE VITAL SERVER!\nUse a standard Json Server which accepts all fields!\n(e.g. json-server see on Github)" />
+
         <TableLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
 
             <TableRow
                 android:layout_width="match_parent"
