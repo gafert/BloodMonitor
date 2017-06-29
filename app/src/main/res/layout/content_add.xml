@@ -172,6 +172,74 @@
 
         </LinearLayout>
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_marginRight="10dp"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/rounded_rect_gradient_background"
+            android:orientation="vertical"
+            android:paddingBottom="10dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="10dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="10dp"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Blood Pressure"
+                    android:textSize="18sp" />
+
+            </LinearLayout>
+
+            <EditText
+                android:id="@+id/systolicTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:background="@drawable/rounded_rect_darkgrey_accent_border"
+                android:ems="10"
+                android:hint="Systolic Blood Pressure"
+                android:inputType="number"
+                android:maxLength="3"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/diastolicTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_weight="1"
+                android:background="@drawable/rounded_rect_darkgrey_accent_border"
+                android:ems="10"
+                android:hint="Diastolic Blood Pressure"
+                android:inputType="number"
+                android:maxLength="3"
+                android:padding="10dp" />
+
+            <EditText
+                android:id="@+id/heartRateTextView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/rounded_rect_darkgrey_accent_border"
+                android:ems="10"
+                android:hint="Pulse"
+                android:inputType="number"
+                android:maxLength="3"
+                android:padding="10dp" />
+
+
+        </LinearLayout>
+
     </LinearLayout>
 
 </android.support.v4.widget.NestedScrollView>

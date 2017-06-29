@@ -362,8 +362,8 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuParty = menu.findItem(R.id.menu_party);
         if (!partyActive) {
             menuParty.setTitle("Turn off Party Mode");
-            mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.party);
-            mediaPlayer.start();
+            //mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.party);
+            //mediaPlayer.start();
             h.postDelayed(new Runnable() {
                 public void run() {
                     partyActive = true;
@@ -393,7 +393,7 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, delay);
         } else {
-            mediaPlayer.stop();
+            //mediaPlayer.stop();
             menuParty.setTitle("Party Mode");
             partyActive = false;
             h.removeCallbacks(runnable);

@@ -1,5 +1,6 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
+import android.content.Intent;
 import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -29,7 +30,7 @@ public class Item {
      * @param mood      How the person is feeling
      * @param reason    Why the person is feeling that way
      */
-    public Item(Location location, @NonNull Date timestamp, int mood, String reason) {
+    public Item(Location location, @NonNull Date timestamp, int mood, String reason, Integer systolicPressure, Integer diastolicPressure, Integer heartRate) {
         // Set the last ID to the size of all Items in the Files/List/Server
         IdentificationGenerator.getInstance().setLastID(ItemHolder.getInstance().getItems().size());
         this.id = IdentificationGenerator.getInstance().getNextID();
@@ -37,9 +38,11 @@ public class Item {
         this.mood = mood;
         this.reason = reason;
         this.location = location;
-        this.diastolicPressure = diastolicPressure;
-        this.systolicPressure = systolicPressure;
-        this.heartRate = heartRate;
+
+        setSystolicPressure(systolicPressure);
+        setDiastolicPressure(diastolicPressure);
+        setHeartRate(heartRate);
+
     }
 
     public int getId() {
@@ -54,24 +57,36 @@ public class Item {
         return heartRate;
     }
 
-    public void setHeartRate(int heartRate) {
-        this.heartRate = heartRate;
+    public void setHeartRate(Integer heartRate) {
+        if(heartRate != null){
+            this.heartRate = heartRate;
+        }else{
+            this.heartRate = 0;
+        }
     }
 
     public int getDiastolicPressure() {
         return diastolicPressure;
     }
 
-    public void setDiastolicPressure(int diastolicPressure) {
-        this.diastolicPressure = diastolicPressure;
+    public void setDiastolicPressure(Integer diastolicPressure) {
+        if(diastolicPressure != null){
+            this.diastolicPressure = diastolicPressure;
+        }else{
+            this.diastolicPressure = 0;
+        }
     }
 
     public int getSystolicPressure() {
         return systolicPressure;
     }
 
-    public void setSystolicPressure(int systolicPressure) {
-        this.systolicPressure = systolicPressure;
+    public void setSystolicPressure(Integer systolicPressure) {
+        if(systolicPressure != null){
+            this.systolicPressure = systolicPressure;
+        }else{
+            this.systolicPressure = 0;
+        }
     }
 
     public Location getLocation() {

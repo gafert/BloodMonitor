@@ -2,6 +2,10 @@ package fhtw.bsa2.gafert_steiner.BloodMonitor.activities;
 
 import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.bluetooth.BluetoothAdapter;
+import android.bluetooth.BluetoothManager;
+import android.content.Context;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.os.Build;
@@ -38,6 +42,8 @@ import java.util.Locale;
 import es.dmoral.toasty.Toasty;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.bluetooth.BloodPressureDeviceConnector;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.bluetooth.BloodPressureProfile;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
 
@@ -61,12 +67,18 @@ public class AddActivity extends AppCompatActivity {
     RadioGroup emotionPicker;                       // Sets the emotionValue
     Integer emotionValue = FEELING_NORMAL;          // Get the emotion
     EditText reasonTextView;                        // Get the reason
+    EditText systolicTestView;
+    EditText diastolicTextView;
+    EditText heartRateTextView;
 
     TextView dateTextView;                          // Shows the date
     ImageButton dateImageButton;
     Date date;                                      // Get the date
 
     GoogleApiClient googleApiClient;
+    public BluetoothAdapter mBluetoothAdapter;
+    BloodPressureProfile bleProfile;
+    BloodPressureDeviceConnector deviceConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,10 +93,30 @@ public class AddActivity extends AppCompatActivity {
                 .build();
         googleApiClient.connect();
 
+
+
         dateImageButton = (ImageButton) findViewById(R.id.dateButton);
         emotionPicker = (RadioGroup) findViewById(R.id.emotionGroup);
         dateTextView = (TextView) findViewById(R.id.dateTextView);
         reasonTextView = (EditText) findViewById(R.id.reasonTextView);
+
+        systolicTestView = (EditText)findViewById(R.id.systolicTextView);
+        diastolicTextView = (EditText)findViewById(R.id.diastolicTextView);
+        heartRateTextView = (EditText)findViewById(R.id.heartRateTextView);
+
+
+        getBluetoothAdapter();
+        if(mBluetoothAdapter!=null){
+            deviceConnector = new BloodPressureDeviceConnector(this, mBluetoothAdapter);
+            bleProfile = new BloodPressureProfile();
+            try {
+                deviceConnector.connect(bleProfile, "5C:31:3E:00:41:95");
+                Toasty.success(AddActivity.this, "Blood Pressure Device connected", Toast.LENGTH_LONG).show();
+            }catch (Exception e){
+                Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
+            }
+        }
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         try {
@@ -178,10 +210,13 @@ public class AddActivity extends AppCompatActivity {
                         if (task.isSuccessful() && task.getResult() != null) {
                             Location location = task.getResult();
                             String addInf = reasonTextView.getText().toString();
+                            Integer systolicValue = Integer.valueOf(systolicTestView.getText().toString());
+                            Integer diastolicValue = Integer.valueOf(diastolicTextView.getText().toString());
+                            Integer heartRateValue = Integer.valueOf(heartRateTextView.getText().toString());
 
                             // TODO: Get bloodPressure values
 
-                            Item item = new Item(location, date, emotionValue, addInf);
+                            Item item = new Item(location, date, emotionValue, addInf, systolicValue, diastolicValue, heartRateValue);
                             if (ItemHolder.getInstance().add(item)) {
                                 // Reset Add site
                                 emotionPicker.check(R.id.normalButton);
@@ -210,6 +245,35 @@ public class AddActivity extends AppCompatActivity {
                 });
             }
         });
+    }
+
+    public void getBluetoothAdapter() {
+
+        final BluetoothManager bluetoothManager =
+                (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
+        mBluetoothAdapter = bluetoothManager.getAdapter();
+
+        if (mBluetoothAdapter == null) {
+            Toast.makeText(this, "Your device does not support Bluetooth", Toast.LENGTH_LONG).show();
+        } else if (!mBluetoothAdapter.isEnabled()) {
+            Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+            startActivityForResult(enableBtIntent, 10);
+        }
+    }
+
+
+
+    public void updateGUI(Float systolicValue, Float diastolicValue, Float pulse){
+
+        Integer syst = Math.round(systolicValue);
+        Integer diast = Math.round(diastolicValue);
+        Integer pul = Math.round(pulse);
+        systolicTestView.setText(String.valueOf(syst));
+        diastolicTextView.setText(String.valueOf(diast));
+
+        heartRateTextView.setText(String.valueOf(pul));
+
+        Toasty.success(AddActivity.this, "Received Blood Pressure Values.", Toast.LENGTH_LONG).show();
     }
 
     @Override
