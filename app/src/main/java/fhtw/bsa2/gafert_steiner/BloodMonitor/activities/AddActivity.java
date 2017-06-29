@@ -107,16 +107,6 @@ public class AddActivity extends AppCompatActivity {
         heartRateEditText = (EditText) findViewById(R.id.heartRateEditText);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
-        try {
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d. MMM yyyy", Locale.getDefault());
-            String dateString = simpleDateFormat.format(new Date());
-            date = simpleDateFormat.parse(dateString);
-
-            dateTextView.setText(dateString);
-        } catch (ParseException e) {
-            // Could not parse
-        }
-
         emotionPicker.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(RadioGroup group, @IdRes int checkedId) {
@@ -139,6 +129,16 @@ public class AddActivity extends AppCompatActivity {
                 }
             }
         });
+
+        try {
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("d. MMM yyyy", Locale.getDefault());
+            String dateString = simpleDateFormat.format(new Date());
+            date = simpleDateFormat.parse(dateString);
+
+            dateTextView.setText(dateString);
+        } catch (ParseException e) {
+            // Could not parse
+        }
 
         // Sets new date picked in datePickerDialog
         View.OnClickListener onDatePick = new View.OnClickListener() {

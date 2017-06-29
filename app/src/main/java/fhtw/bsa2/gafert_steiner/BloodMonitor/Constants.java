@@ -30,7 +30,6 @@ public class Constants {
 
     public static final Type ITEM_LIST_TYPE_TOKEN = new TypeToken<ArrayList<Item>>() {
     }.getType();
-
     public static final Type ITEM_TYPE_TOKEN = new TypeToken<Item>() {
     }.getType();
 
@@ -40,6 +39,13 @@ public class Constants {
     public static final String CHART_HEART_RATE = "heartRate";
     public static final String CHART_DIASTOLIC = "diastolic";
     public static final String CHART_SYSTOLIC = "systolic";
+
+    public static final String GATT_CHARACTERISTIC_SYSTOLIC = "Systolischer Blutdruck";
+    public static final String GATT_CHARACTERISTIC_DIASTOLIC = "Diastolischer Blutdruck";
+    public static final String GATT_CHARACTERISTIC_HEART_RATE = "Das Schlagen des Herzens";
+
+    public static final int BLUETOOTHINTENT = 10;
+
     public static final Comparator<Item> DATE_COMPARATOR = new Comparator<Item>() {
         @Override
         public int compare(Item a, Item b) {
@@ -53,12 +59,6 @@ public class Constants {
             return 0;
         }
     };
-
-    public static final String GATT_CHARACTERISTIC_SYSTOLIC = "Systolischer Blutdruck";
-    public static final String GATT_CHARACTERISTIC_DIASTOLIC = "Systolischer Blutdruck";
-    public static final String GATT_CHARACTERISTIC_HEART_RATE = "Systolischer Blutdruck";
-
-    public static final int BLUETOOTHINTENT = 10;
 
     /**
      * Suppress default constructor for noninstantiability
