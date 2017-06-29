@@ -34,9 +34,9 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
 public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.ViewHolder> {
 
     private final Comparator<Item> comparator;
-    private int listItemLayout;
-    private Context context;
-    private ItemArrayAdapter adapter;
+    private final int listItemLayout;
+    private final Context context;
+    private final ItemArrayAdapter adapter;
     private final SortedList<Item> mSortedList = new SortedList<>(Item.class, new SortedList.Callback<Item>() {
         @Override
         public void onInserted(int position, int count) {
@@ -188,7 +188,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
     }
 
     /**
-     * Addes a List of Item to the RecyclerView
+     * Address a List of Item to the RecyclerView
      * @param models The items to be added
      */
     public void add(List<Item> models) {

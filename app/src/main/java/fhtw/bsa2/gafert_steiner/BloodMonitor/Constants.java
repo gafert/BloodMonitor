@@ -10,10 +10,6 @@ import java.util.List;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
 
-/**
- * Created by michi on 19.06.17.
- */
-
 public class Constants {
     public final static int FEELING_VERY_HAPPY = 20;
     public final static int FEELING_HAPPY = 10;
@@ -57,6 +53,12 @@ public class Constants {
             return 0;
         }
     };
+
+    public static final String GATT_CHARACTERISTIC_SYSTOLIC = "Systolischer Blutdruck";
+    public static final String GATT_CHARACTERISTIC_DIASTOLIC = "Systolischer Blutdruck";
+    public static final String GATT_CHARACTERISTIC_HEART_RATE = "Systolischer Blutdruck";
+
+    public static final int BLUETOOTHINTENT = 10;
 
     /**
      * Suppress default constructor for noninstantiability

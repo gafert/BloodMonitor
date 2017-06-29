@@ -8,6 +8,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import fhtw.bsa2.gafert_steiner.BloodMonitor.Constants;
 import fhtw.bsa2.hammer.medical_bluetooth_4_0_devices.deviceProfiles.BLEFeature;
 import fhtw.bsa2.hammer.medical_bluetooth_4_0_devices.deviceProfiles.BLEProfile;
 import fhtw.bsa2.hammer.medical_bluetooth_4_0_devices.gatt.GattCharacteristic;
@@ -46,24 +47,24 @@ public class BloodPressureProfile implements BLEProfile {
     public void addData(GattCharacteristic gattCharacteristic, byte[] data) {
         //Implement your parse logic and add the received values to the list of measurements
         //Hier tust du parsen und die Werte einer Liste hinzufügen:
-        Log.d(this.getClass().toString(), "AddData has been called with"+gattCharacteristic.toString()+"--------"+data.length);
-        MeasurementValue syst = new MeasurementValue(Float.valueOf(data[1]), SIUnit.PRESSURE, "Systolischer Blutdruck");
-        MeasurementValue diast = new MeasurementValue(Float.valueOf(data[3]), SIUnit.PRESSURE, "Diastolischer Blutdruck");
-        MeasurementValue pulse = new MeasurementValue(Float.valueOf(data[7]), SIUnit.PRESSURE, "Puls");
+        Log.d(this.getClass().toString(), "AddData has been called with" + gattCharacteristic.toString() + "--------" + data.length);
+        MeasurementValue syst = new MeasurementValue((float) data[1], SIUnit.PRESSURE, Constants.GATT_CHARACTERISTIC_SYSTOLIC);
+        MeasurementValue diast = new MeasurementValue((float) data[3], SIUnit.PRESSURE, Constants.GATT_CHARACTERISTIC_DIASTOLIC);
+        MeasurementValue pulse = new MeasurementValue((float) data[7], SIUnit.PRESSURE, Constants.GATT_CHARACTERISTIC_HEART_RATE);
 
-        Measurement messure = new Measurement();
-        messure.addMeasurmentValue(syst);
-        messure.addMeasurmentValue(diast);
-        messure.addMeasurmentValue(pulse);
+        Measurement measurement = new Measurement();
+        measurement.addMeasurmentValue(syst);
+        measurement.addMeasurmentValue(diast);
+        measurement.addMeasurmentValue(pulse);
 
-        measurements.add(messure);
-
+        measurements.add(measurement);
     }
 
     @Override
     public Measurement getLastMeasurement() {
-        return measurements.get(measurements.size() -1);
+        return measurements.get(measurements.size() - 1);
     }
+
     @Override
     public List<Measurement> getMeasurments() {
         return this.measurements;

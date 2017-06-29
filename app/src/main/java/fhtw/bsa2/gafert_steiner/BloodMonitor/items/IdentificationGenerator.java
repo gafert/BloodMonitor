@@ -17,9 +17,9 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
  */
 public class IdentificationGenerator {
     private static final String TAG = "IdentificationGenerator";
-    private static IdentificationGenerator ourInstance = null;
-    private Context context;
-    private SharedPreferences settings;
+    private static IdentificationGenerator ourInstance;
+    private final Context context;
+    private final SharedPreferences settings;
     private int index;
 
     private IdentificationGenerator(Context context) {

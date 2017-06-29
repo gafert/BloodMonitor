@@ -40,6 +40,7 @@ import java.util.Date;
 import java.util.Locale;
 
 import es.dmoral.toasty.Toasty;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.Constants;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.bluetooth.BloodPressureDeviceConnector;
@@ -64,19 +65,18 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.LOCATION_REQ_PERM;
  */
 public class AddActivity extends AppCompatActivity {
 
+    BluetoothAdapter mBluetoothAdapter;
     RadioGroup emotionPicker;                       // Sets the emotionValue
     Integer emotionValue = FEELING_NORMAL;          // Get the emotion
     EditText reasonTextView;                        // Get the reason
-    EditText systolicTestView;
-    EditText diastolicTextView;
-    EditText heartRateTextView;
+    EditText systolicEditText;
+    EditText diastolicEditText;
+    EditText heartRateEditText;
 
     TextView dateTextView;                          // Shows the date
     ImageButton dateImageButton;
     Date date;                                      // Get the date
-
     GoogleApiClient googleApiClient;
-    public BluetoothAdapter mBluetoothAdapter;
     BloodPressureProfile bleProfile;
     BloodPressureDeviceConnector deviceConnector;
 
@@ -93,35 +93,18 @@ public class AddActivity extends AppCompatActivity {
                 .build();
         googleApiClient.connect();
 
-
+        // Connect to bluetooth device if access is granted
+        if (getBluetoothAdapter()) {
+            connectToDevice();
+        }
 
         dateImageButton = (ImageButton) findViewById(R.id.dateButton);
         emotionPicker = (RadioGroup) findViewById(R.id.emotionGroup);
         dateTextView = (TextView) findViewById(R.id.dateTextView);
         reasonTextView = (EditText) findViewById(R.id.reasonTextView);
-
-        systolicTestView = (EditText)findViewById(R.id.systolicTextView);
-        diastolicTextView = (EditText)findViewById(R.id.diastolicTextView);
-        heartRateTextView = (EditText)findViewById(R.id.heartRateTextView);
-
-
-        getBluetoothAdapter();
-        if(mBluetoothAdapter!=null){
-            deviceConnector = new BloodPressureDeviceConnector(this, mBluetoothAdapter);
-            bleProfile = new BloodPressureProfile();
-            try {
-                boolean successful = deviceConnector.connect(bleProfile, "5C:31:3E:00:41:95");
-                if(successful){
-                    Toasty.success(AddActivity.this, "Blood Pressure Device connected", Toast.LENGTH_LONG).show();
-                }else{
-                    Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
-                }
-
-            }catch (Exception e){
-                Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
-            }
-        }
-
+        systolicEditText = (EditText) findViewById(R.id.systolicEditText);
+        diastolicEditText = (EditText) findViewById(R.id.diastolicEditText);
+        heartRateEditText = (EditText) findViewById(R.id.heartRateEditText);
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
 
         try {
@@ -213,38 +196,44 @@ public class AddActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<Location> task) {
                         if (task.isSuccessful() && task.getResult() != null) {
-                            Location location = task.getResult();
-                            String addInf = reasonTextView.getText().toString();
-                            Integer systolicValue = Integer.valueOf(systolicTestView.getText().toString());
-                            Integer diastolicValue = Integer.valueOf(diastolicTextView.getText().toString());
-                            Integer heartRateValue = Integer.valueOf(heartRateTextView.getText().toString());
 
-                            // TODO: Get bloodPressure values
+                            // Check if BloodPressure Inputs are filled
+                            if (checkInputs()) {
+                                Location location = task.getResult();
+                                String addInf = reasonTextView.getText().toString();
+                                Integer systolicValue = Integer.valueOf(systolicEditText.getText().toString());
+                                Integer diastolicValue = Integer.valueOf(diastolicEditText.getText().toString());
+                                Integer heartRateValue = Integer.valueOf(heartRateEditText.getText().toString());
 
-                            Item item = new Item(location, date, emotionValue, addInf, systolicValue, diastolicValue, heartRateValue);
-                            if (ItemHolder.getInstance().add(item)) {
-                                // Reset Add site
-                                emotionPicker.check(R.id.normalButton);
-                                reasonTextView.setText(null);
+                                Item item = new Item(location, date, emotionValue, addInf, systolicValue, diastolicValue, heartRateValue);
+                                if (ItemHolder.getInstance().add(item)) {
+                                    // Reset Add site
+                                    emotionPicker.check(R.id.normalButton);
+                                    reasonTextView.setText(null);
 
-                                // Created a new Dialog
-                                final Dialog submitDialog = new Dialog(AddActivity.this, R.style.BetterDialog);
-                                submitDialog.setContentView(R.layout.dialog_submit);
-                                submitDialog.show();
+                                    // Created a new Dialog
+                                    final Dialog submitDialog = new Dialog(AddActivity.this, R.style.BetterDialog);
+                                    submitDialog.setContentView(R.layout.dialog_submit);
+                                    submitDialog.show();
 
-                                // Hide Dialog after certain time
-                                final Handler handler = new Handler();
-                                handler.postDelayed(new Runnable() {
-                                    @Override
-                                    public void run() {
-                                        submitDialog.dismiss();
-                                        AddActivity.this.finish();
-                                    }
-                                }, 1000);
+                                    // Hide Dialog after certain time
+                                    final Handler handler = new Handler();
+                                    handler.postDelayed(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            submitDialog.dismiss();
+                                            AddActivity.this.finish();
+                                        }
+                                    }, 1000);
+                                }
+                            } else {
+                                Toasty.error(AddActivity.this, "Please fill all Blood Pressure Input Fields").show();
+                                Log.e("AddActivity", "getLastLocation: exception", task.getException());
                             }
                         } else {
+                            Log.e("AddActivity", "Could not add as not all inputs are filled");
                             Toasty.error(AddActivity.this, "Could not get location. Try again!", Toast.LENGTH_LONG).show();
-                            Log.w("AddActivity", "getLastLocation: exception", task.getException());
+
                         }
                     }
                 });
@@ -252,33 +241,67 @@ public class AddActivity extends AppCompatActivity {
         });
     }
 
-    public void getBluetoothAdapter() {
-
+    public Boolean getBluetoothAdapter() {
         final BluetoothManager bluetoothManager =
                 (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         mBluetoothAdapter = bluetoothManager.getAdapter();
 
         if (mBluetoothAdapter == null) {
-            Toast.makeText(this, "Your device does not support Bluetooth", Toast.LENGTH_LONG).show();
+            Toasty.warning(this, "Your device does not support Bluetooth", Toast.LENGTH_LONG).show();
+            return false;
         } else if (!mBluetoothAdapter.isEnabled()) {
             Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-            startActivityForResult(enableBtIntent, 10);
+            startActivityForResult(enableBtIntent, Constants.BLUETOOTHINTENT);
+            return false;
+        } else {
+            return true;
         }
     }
 
-
-
-    public void updateGUI(Float systolicValue, Float diastolicValue, Float pulse){
-
+    public void updateGUI(Float systolicValue, Float diastolicValue, Float pulse) {
         Integer syst = Math.round(systolicValue);
         Integer diast = Math.round(diastolicValue);
         Integer pul = Math.round(pulse);
-        systolicTestView.setText(String.valueOf(syst));
-        diastolicTextView.setText(String.valueOf(diast));
+        systolicEditText.setText(String.valueOf(syst));
+        diastolicEditText.setText(String.valueOf(diast));
+        heartRateEditText.setText(String.valueOf(pul));
+        Toasty.success(AddActivity.this, "Received Blood Pressure Values", Toast.LENGTH_LONG).show();
+    }
 
-        heartRateTextView.setText(String.valueOf(pul));
 
-        Toasty.success(AddActivity.this, "Received Blood Pressure Values.", Toast.LENGTH_LONG).show();
+    private Boolean checkInputs() {
+        return !systolicEditText.getText().toString().equals("") && !diastolicEditText.getText().toString().equals("") && !heartRateEditText.getText().toString().equals("");
+    }
+
+    private void connectToDevice() {
+        if (mBluetoothAdapter != null) {
+            deviceConnector = new BloodPressureDeviceConnector(this, mBluetoothAdapter);
+            bleProfile = new BloodPressureProfile();
+            try {
+                // Successful does not correctly report if the connection was possible
+                boolean successful = deviceConnector.connect(bleProfile, "5C:31:3E:00:41:95");
+                if (successful) {
+                    Toasty.success(AddActivity.this, "Blood Pressure Device connected", Toast.LENGTH_LONG).show();
+                } else {
+                    Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
+                }
+            } catch (Exception e) {
+                Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
+            }
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == Constants.BLUETOOTHINTENT) {
+            Log.d("Bluetooth Result", "onActivityResult: " + resultCode);
+            if (resultCode != 0) {
+                connectToDevice();
+            } else {
+                Toasty.warning(this, "You need to enter your Blood Pressure Information manually").show();
+            }
+        }
     }
 
     @Override

@@ -6,6 +6,7 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Locale;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
 
@@ -15,11 +16,7 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
  */
 public class DateFormatter implements IAxisValueFormatter {
 
-    private ArrayList<Item> items;
-
-    public DateFormatter() {
-        items = new ArrayList<>();
-    }
+    private final ArrayList<Item> items;
 
     public DateFormatter(ArrayList<Item> items) {
         this.items = items;
@@ -33,7 +30,7 @@ public class DateFormatter implements IAxisValueFormatter {
         if (!items.isEmpty()) {
             try {
                 Item emotionEntry = items.get((int) value);
-                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E d. MMM");
+                SimpleDateFormat simpleDateFormat = new SimpleDateFormat("E d. MMM", Locale.getDefault());
                 Date date = emotionEntry.getTimestamp();
                 newDate = simpleDateFormat.format(date);                                           // Set the date to the text
             } catch (Exception e) {

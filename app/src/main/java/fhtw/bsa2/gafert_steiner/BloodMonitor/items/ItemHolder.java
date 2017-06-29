@@ -17,7 +17,7 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 public class ItemHolder {
     private static final String TAG = "ItemHolder";
     private static ItemHolder ourInstance = null;
-    private Context context;
+    private final Context context;
     private List<Item> items = new ArrayList<>();
     private List<ItemsChangedListener> listener = new ArrayList<>();
     private boolean loadedItems = false;
@@ -84,7 +84,7 @@ public class ItemHolder {
      * Tries to post it to the server
      * Calls the change listener
      *
-     * @param newEntry The item wich shall be added
+     * @param newEntry The item which shall be added
      * @return Was the Item added = true
      */
     public boolean add(@NonNull Item newEntry) {

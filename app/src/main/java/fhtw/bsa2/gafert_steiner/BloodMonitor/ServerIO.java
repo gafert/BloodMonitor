@@ -51,7 +51,7 @@ class ServerIO {
             BufferedReader reader = new BufferedReader(new InputStreamReader(inputStream));
             String inputLine;
             while ((inputLine = reader.readLine()) != null) {
-                buffer.append(inputLine + "\n");
+                buffer.append(inputLine).append("\n");
             }
             result = buffer.toString();
             con.disconnect();

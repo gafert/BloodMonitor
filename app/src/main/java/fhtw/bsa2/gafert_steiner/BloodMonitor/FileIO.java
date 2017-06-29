@@ -14,10 +14,8 @@ import com.google.gson.GsonBuilder;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.List;
@@ -43,8 +41,8 @@ public class FileIO {
     private static final String TAG = "FileIO";
     private static FileIO ourInstance = null;
     private static File itemsFile;      // All items file
-    private Context context;
-    private SharedPreferences settings;
+    private final Context context;
+    private final SharedPreferences settings;
 
     private boolean showToasts = false;
     private boolean isAdding = false;
@@ -68,7 +66,7 @@ public class FileIO {
         return ourInstance;
     }
 
-    private void getItemFile() throws IOException {
+    private void getItemFile() {
         // Get the directory for the app's private pictures directory.
         itemsFile = new File(context.getExternalFilesDir(
                 Environment.DIRECTORY_DOCUMENTS), ITEMS_FILE);
@@ -111,13 +109,11 @@ public class FileIO {
                     jsonString = reader.readLine();
                     reader.close();
                 }
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
-        return (ArrayList<Item>) new Gson().fromJson(jsonString, Constants.ITEM_LIST_TYPE_TOKEN);
+        return new Gson().fromJson(jsonString, Constants.ITEM_LIST_TYPE_TOKEN);
     }
 
     /**

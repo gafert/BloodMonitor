@@ -31,6 +31,7 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
+import es.dmoral.toasty.Toasty;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.DateFormatter;
@@ -51,9 +52,9 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
 import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.searchFilter;
 
 public class MainActivity extends AppCompatActivity {
+    private final int delay = 100;
     // Party Mode vars
     private Handler h = new Handler();
-    private int delay = 100;
     private Runnable runnable;
     private boolean partyActive = false;
     private int partyCounter = 0;
@@ -72,7 +73,8 @@ public class MainActivity extends AppCompatActivity {
         FileIO.getInstance(getApplicationContext());
         IdentificationGenerator.getInstance(getApplicationContext());
         ItemHolder.getInstance(getApplicationContext());
-        FileIO.getInstance().sync(true);
+
+        //FileIO.getInstance().sync(true);
 
         // Setup Toolbar
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -362,8 +364,7 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuParty = menu.findItem(R.id.menu_party);
         if (!partyActive) {
             menuParty.setTitle("Turn off Party Mode");
-            //mediaPlayer = MediaPlayer.create(MainActivity.this, R.raw.party);
-            //mediaPlayer.start();
+            Toasty.info(MainActivity.this, "Now Playing: 'Bring the Madness'").show();
             h.postDelayed(new Runnable() {
                 public void run() {
                     partyActive = true;
@@ -393,7 +394,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }, delay);
         } else {
-            //mediaPlayer.stop();
             menuParty.setTitle("Party Mode");
             partyActive = false;
             h.removeCallbacks(runnable);
