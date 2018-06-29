@@ -1,7 +1,5 @@
 package fhtw.bsa2.gafert_steiner.BloodMonitor.items;
 
-import android.content.Intent;
-import android.location.Location;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
@@ -17,7 +15,7 @@ public class Item {
     private Date timestamp;
     private Integer mood;
     private String reason;
-    private Location location;
+    private SimpleLocation location;
     private int heartRate;
     private int diastolicPressure;
     private int systolicPressure;
@@ -30,10 +28,10 @@ public class Item {
      * @param mood      How the person is feeling
      * @param reason    Why the person is feeling that way
      */
-    public Item(Location location, @NonNull Date timestamp, int mood, String reason, Integer systolicPressure, Integer diastolicPressure, Integer heartRate) {
+    public Item(SimpleLocation location, @NonNull Date timestamp, int mood, String reason, Integer systolicPressure, Integer diastolicPressure, Integer heartRate) {
         // Set the last ID to the size of all Items in the Files/List/Server
-        IdentificationGenerator.getInstance().setLastID(ItemHolder.getInstance().getItems().size());
-        this.id = IdentificationGenerator.getInstance().getNextID();
+        IDProvider.getInstance().setLastID(ItemHolder.getInstance().getItems().size());
+        this.id = IDProvider.getInstance().getNextID();
         this.timestamp = timestamp;
         this.mood = mood;
         this.reason = reason;
@@ -42,7 +40,6 @@ public class Item {
         setSystolicPressure(systolicPressure);
         setDiastolicPressure(diastolicPressure);
         setHeartRate(heartRate);
-
     }
 
     public int getId() {
@@ -89,11 +86,11 @@ public class Item {
         }
     }
 
-    public Location getLocation() {
+    public SimpleLocation getLocation() {
         return location;
     }
 
-    public void setLocation(Location location) {
+    public void setLocation(SimpleLocation location) {
         this.location = location;
     }
 

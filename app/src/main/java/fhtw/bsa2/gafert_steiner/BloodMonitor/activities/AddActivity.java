@@ -45,15 +45,9 @@ import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.bluetooth.BloodPressureDeviceConnector;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.bluetooth.BloodPressureProfile;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.items.*;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_HAPPY;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_NORMAL;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_SAD;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_HAPPY;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.LOCATION_REQ_PERM;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.*;
 
 /**
  * Contains all input fields to make an {@link Item}
@@ -65,20 +59,20 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.LOCATION_REQ_PERM;
  */
 public class AddActivity extends AppCompatActivity {
 
-    BluetoothAdapter mBluetoothAdapter;
-    RadioGroup emotionPicker;                       // Sets the emotionValue
-    Integer emotionValue = FEELING_NORMAL;          // Get the emotion
-    EditText reasonTextView;                        // Get the reason
-    EditText systolicEditText;
-    EditText diastolicEditText;
-    EditText heartRateEditText;
+    private BluetoothAdapter mBluetoothAdapter;
+    private RadioGroup emotionPicker;                       // Sets the emotionValue
+    private Integer emotionValue = FEELING_NORMAL;          // Get the emotion
+    private EditText reasonTextView;                        // Get the reason
+    private EditText systolicEditText;
+    private EditText diastolicEditText;
+    private EditText heartRateEditText;
 
-    TextView dateTextView;                          // Shows the date
-    ImageButton dateImageButton;
-    Date date;                                      // Get the date
-    GoogleApiClient googleApiClient;
-    BloodPressureProfile bleProfile;
-    BloodPressureDeviceConnector deviceConnector;
+    private TextView dateTextView;                          // Shows the date
+    private ImageButton dateImageButton;
+    private Date date;                                      // Get the date
+    private GoogleApiClient googleApiClient;
+    private BloodPressureProfile bleProfile;
+    private BloodPressureDeviceConnector deviceConnector;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -199,7 +193,7 @@ public class AddActivity extends AppCompatActivity {
 
                             // Check if BloodPressure Inputs are filled
                             if (checkInputs()) {
-                                Location location = task.getResult();
+                                SimpleLocation location = new SimpleLocation(task.getResult().getLatitude(), task.getResult().getLongitude());
                                 String addInf = reasonTextView.getText().toString();
                                 Integer systolicValue = Integer.valueOf(systolicEditText.getText().toString());
                                 Integer diastolicValue = Integer.valueOf(diastolicEditText.getText().toString());
@@ -281,7 +275,7 @@ public class AddActivity extends AppCompatActivity {
                 // Successful does not correctly report if the connection was possible
                 boolean successful = deviceConnector.connect(bleProfile, "5C:31:3E:00:41:95");
                 if (successful) {
-                    Toasty.success(AddActivity.this, "Blood Pressure Device connected", Toast.LENGTH_LONG).show();
+                    Toasty.success(AddActivity.this, "Blood Pressure Device can connect now", Toast.LENGTH_LONG).show();
                 } else {
                     Toasty.error(AddActivity.this, "Could not connect to Blood Pressure Device", Toast.LENGTH_LONG).show();
                 }

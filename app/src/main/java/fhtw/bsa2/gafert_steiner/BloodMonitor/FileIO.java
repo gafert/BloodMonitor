@@ -21,13 +21,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import es.dmoral.toasty.Toasty;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.items.*;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.GET_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.ITEMS_FILE;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.*;
 
 /**
  * Saves items to a File with {@link #writeItemFile(List)} and to a server with {@link AsyncPost}
@@ -97,6 +93,7 @@ public class FileIO {
 
     /**
      * Reads all items from the save file
+     *
      * @return Parsed ArrayList of Item
      */
     public ArrayList<Item> readItemFile() {

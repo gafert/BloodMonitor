@@ -2,7 +2,6 @@ package fhtw.bsa2.gafert_steiner.BloodMonitor.activities;
 
 import android.content.Intent;
 import android.graphics.Color;
-import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.AppBarLayout;
@@ -17,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
@@ -31,25 +31,12 @@ import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import java.util.ArrayList;
 import java.util.List;
 
-import es.dmoral.toasty.Toasty;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.FileIO;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 import fhtw.bsa2.gafert_steiner.BloodMonitor.chart.DateFormatter;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.IdentificationGenerator;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.Item;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemArrayAdapter;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.ItemHolder;
-import fhtw.bsa2.gafert_steiner.BloodMonitor.items.RecyclerViewMargin;
-import info.hoang8f.widget.FButton;
+import fhtw.bsa2.gafert_steiner.BloodMonitor.items.*;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_DIASTOLIC;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_EMOTIONS;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_HEART_RATE;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.CHART_SYSTOLIC;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.DATE_COMPARATOR;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_HAPPY;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.FEELING_VERY_SAD;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.searchFilter;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.*;
 
 public class MainActivity extends AppCompatActivity {
     private final int delay = 100;
@@ -58,7 +45,6 @@ public class MainActivity extends AppCompatActivity {
     private Runnable runnable;
     private boolean partyActive = false;
     private int partyCounter = 0;
-    private MediaPlayer mediaPlayer;
 
     private AppBarLayout appBar;
     private Menu menu;
@@ -71,7 +57,7 @@ public class MainActivity extends AppCompatActivity {
 
         // Setup Singletons
         FileIO.getInstance(getApplicationContext());
-        IdentificationGenerator.getInstance(getApplicationContext());
+        IDProvider.getInstance(getApplicationContext());
         ItemHolder.getInstance(getApplicationContext());
 
         //FileIO.getInstance().sync(true);
@@ -91,7 +77,7 @@ public class MainActivity extends AppCompatActivity {
         itemArrayAdapter.add(ItemHolder.getInstance().getItems());  // Fill the list
         setupGraph(ItemHolder.getInstance().getItems(), CHART_EMOTIONS);            // Fill the chart
 
-        FButton addButton = (FButton) findViewById(R.id.addButton);
+        Button addButton = (Button) findViewById(R.id.addButton);
         addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -364,7 +350,6 @@ public class MainActivity extends AppCompatActivity {
         MenuItem menuParty = menu.findItem(R.id.menu_party);
         if (!partyActive) {
             menuParty.setTitle("Turn off Party Mode");
-            Toasty.info(MainActivity.this, "Now Playing: 'Bring the Madness'").show();
             h.postDelayed(new Runnable() {
                 public void run() {
                     partyActive = true;

@@ -15,29 +15,29 @@ import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
  * The function {@link #setLastID(int)} can be used to set the ID in the {@link SharedPreferences}
  * This may be used if the ID was changed somewhere else and not directly with this instance
  */
-public class IdentificationGenerator {
-    private static final String TAG = "IdentificationGenerator";
-    private static IdentificationGenerator ourInstance;
+public class IDProvider {
+    private static final String TAG = "IDProvider";
+    private static IDProvider ourInstance;
     private final Context context;
     private final SharedPreferences settings;
     private int index;
 
-    private IdentificationGenerator(Context context) {
+    private IDProvider(Context context) {
         this.context = context;
         this.settings = context.getSharedPreferences(SETTINGS, 0);
         this.index = settings.getInt(INDEX_PREF, 0);
     }
 
-    public static IdentificationGenerator getInstance() {
+    public static IDProvider getInstance() {
         if (ourInstance == null) {
             Log.e(TAG, "getInstance: Context not set");
         }
         return ourInstance;
     }
 
-    public static IdentificationGenerator getInstance(Context context) {
+    public static IDProvider getInstance(Context context) {
         if (ourInstance == null) {
-            ourInstance = new IdentificationGenerator(context);
+            ourInstance = new IDProvider(context);
         }
         return ourInstance;
     }
@@ -54,7 +54,7 @@ public class IdentificationGenerator {
         editor.putInt(INDEX_PREF, index);
         editor.apply();
 
-        Log.d(TAG, "getNextID: IdentificationGenerator=" + index);
+        Log.d(TAG, "getNextID: IDProvider=" + index);
         return index;
     }
 

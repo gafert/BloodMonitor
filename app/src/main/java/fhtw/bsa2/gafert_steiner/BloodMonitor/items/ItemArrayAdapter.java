@@ -159,7 +159,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
 
     @Override
     public int getItemCount() {
-        return mSortedList == null ? 0 : mSortedList.size();
+        return mSortedList.size();
     }
 
     /**
@@ -181,6 +181,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
 
     /**
      * Adds a single Element to the RecyclerView
+     *
      * @param model The Item to be added
      */
     public void add(Item model) {
@@ -189,6 +190,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
 
     /**
      * Address a List of Item to the RecyclerView
+     *
      * @param models The items to be added
      */
     public void add(List<Item> models) {
@@ -197,6 +199,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
 
     /**
      * Removes a specific Item
+     *
      * @param model Item to be removed
      */
     public void remove(Item model) {
@@ -205,6 +208,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
 
     /**
      * Removes a List of Items
+     *
      * @param models Items to be removed
      */
     public void remove(List<Item> models) {
@@ -263,7 +267,7 @@ public class ItemArrayAdapter extends RecyclerView.Adapter<ItemArrayAdapter.View
                 geocoder = new Geocoder(context, Locale.getDefault());
 
                 addresses = geocoder.getFromLocation(latitude, longitude, 1); // Here 1 represent max location result to returned, by documents it recommended 1 to 5
-                String address = addresses.get(0).getAddressLine(0); // If any additional address line present than only, check with max available address lines by getMaxAddressLineIndex()
+                String address = addresses.get(0).getAddressLine(0); // If any additional address line present, then only check with max available address lines by getMaxAddressLineIndex()
                 String city = addresses.get(0).getLocality();
                 String state = addresses.get(0).getAdminArea();
                 String country = addresses.get(0).getCountryName();

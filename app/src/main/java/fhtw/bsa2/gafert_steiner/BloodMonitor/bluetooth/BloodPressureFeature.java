@@ -11,7 +11,7 @@ import fhtw.bsa2.hammer.medical_bluetooth_4_0_devices.gatt.GattCharacteristic;
 
 public class BloodPressureFeature implements BLEFeature {
 
-    BluetoothGattCharacteristic characteristic;
+    private BluetoothGattCharacteristic characteristic;
 
     @Override
     public GattCharacteristic getGattCharacteristicFeature() {

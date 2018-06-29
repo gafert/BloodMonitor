@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '27.0.3'
     defaultConfig {
         applicationId "fhtw.bsa2.gafert_steiner.bloodmonitor"
         minSdkVersion 22
@@ -20,19 +20,13 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    compile 'com.android.support:appcompat-v7:25.3.1'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
-    compile 'com.android.support:design:25.3.1'
-    compile 'com.android.support:recyclerview-v7:25.3.1'
-    compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
-    compile 'info.hoang8f:fbutton:1.0.5'
-    compile 'com.github.GrenderG:Toasty:1.2.5'
-    compile 'com.google.code.gson:gson:2.7'
-    compile 'com.google.android.gms:play-services-location:11.0.0'
-    testCompile 'junit:junit:4.12'
-    compile files('libs/GATT_BLE.jar')
+    implementation fileTree(include: ['*.jar'], dir: 'libs')
+    implementation 'com.android.support:appcompat-v7:25.4.0'
+    implementation 'com.android.support:design:25.4.0'
+    implementation 'com.android.support:recyclerview-v7:25.4.0'
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
+    implementation 'com.github.GrenderG:Toasty:1.2.5'
+    implementation 'com.google.code.gson:gson:2.8.3'
+    implementation 'com.google.android.gms:play-services-location:11.0.0'
+    implementation 'com.android.support.constraint:constraint-layout:1.1.2'
 }

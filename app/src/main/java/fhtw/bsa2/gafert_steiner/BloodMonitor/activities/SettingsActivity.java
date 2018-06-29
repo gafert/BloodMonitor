@@ -7,13 +7,7 @@ import android.widget.EditText;
 
 import fhtw.bsa2.gafert_steiner.BloodMonitor.R;
 
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.GET_DIRECTORY_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.GET_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.IP_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.PORT_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_DIRECTORY_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.POST_URL_PREF;
-import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.SETTINGS;
+import static fhtw.bsa2.gafert_steiner.BloodMonitor.Constants.*;
 
 /**
  * Saves Changes to the Settings in the {@link SharedPreferences}

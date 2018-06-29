@@ -22,11 +22,11 @@ public class BloodPressureDeviceConnector extends DeviceConnector {
     public void onNewDataAvailable() {
         // Wenn die Messung fertig ist wird automatsich die Methode hier aufgerufen,
         // hier kannst du die letzte Messung nehmen und irgendwo in deine GUI schreiben
-        Measurement currentMessure = this.getLastMeasurement();
+        Measurement measurement = this.getLastMeasurement();
 
-        Float systolicValue = currentMessure.getMeasurementValueByName(Constants.GATT_CHARACTERISTIC_SYSTOLIC).getValue();
-        Float diastolicValue = currentMessure.getMeasurementValueByName(Constants.GATT_CHARACTERISTIC_DIASTOLIC).getValue();
-        Float heartRateValue = currentMessure.getMeasurementValueByName(Constants.GATT_CHARACTERISTIC_HEART_RATE).getValue();
+        Float systolicValue = measurement.getMeasurementValueByName(Constants.GATT_CHARACTERISTIC_SYSTOLIC).getValue();
+        Float diastolicValue = measurement.getMeasurementValueByName(Constants.GATT_CHARACTERISTIC_DIASTOLIC).getValue();
+        Float heartRateValue = measurement.getMeasurementValueByName(Constants.GATT_CHARACTERISTIC_HEART_RATE).getValue();
 
         mActivity.updateGUI(systolicValue, diastolicValue, heartRateValue);
 

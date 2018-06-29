@@ -19,8 +19,8 @@ import fhtw.bsa2.hammer.medical_bluetooth_4_0_devices.measurement.SIUnit;
 
 public class BloodPressureProfile implements BLEProfile {
 
-    List<Measurement> measurements = new ArrayList<Measurement>();
-    BloodPressureFeature features = new BloodPressureFeature();
+    private List<Measurement> measurements = new ArrayList<Measurement>();
+    private BloodPressureFeature features = new BloodPressureFeature();
 
     @Override
     public Map<GattService, List<GattCharacteristic>> getCharacteristicsList() {
